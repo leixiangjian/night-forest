@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#050b0a">
   <title>黑林夜行 · NIGHTWOOD</title>
-  <meta name="description" content="一款发生在深夜密林中的单人生存穿越小游戏。靠一束手电、一把刀、一卷绳和有限的急救药物，活着走到林道。">
+  <meta name="description" content="一款发生在深夜密林中的单人生存穿越小游戏。六片地貌、30 段林路，每关不同天气，每过一关获得一件随身物品；靠手电、猎刀、绳索和急救药物活着走到黎明。">
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%2308110d'/%3E%3Cpath d='M32 11c8 10 14 16 14 25a14 14 0 1 1-28 0c0-9 6-15 14-25z' fill='%23e2a25e'/%3E%3Cpath d='M32 26c3 5 5 8 5 12a5 5 0 0 1-10 0c0-4 2-7 5-12z' fill='%2308110d'/%3E%3C/svg%3E">
   <link rel="stylesheet" href="style.css">
 </head>
@@ -103,6 +103,10 @@
         <symbol id="i-chevron" viewBox="0 0 24 24">
           <path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
         </symbol>
+        <symbol id="i-shield" viewBox="0 0 24 24">
+          <path d="M12 3l7 3v5.5c0 4.5-3 7.6-7 9.5-4-1.9-7-5-7-9.5V6l7-3z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+          <path d="M8.8 12.1l2.1 2.1 4.6-4.4" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+        </symbol>
       </defs>
     </svg>
 
@@ -117,8 +121,8 @@
           <div class="objective-main">
             <span class="objective-icon"><svg><use href="#i-compass"/></svg></span>
             <div class="objective-copy">
-              <span class="eyebrow">当前目标 · 向北</span>
-              <strong>穿过黑森林，抵达北侧林道</strong>
+              <span class="eyebrow">第 <b id="levelNum">1</b> / 30 关 · <span id="levelName">林缘</span></span>
+              <strong id="objectiveText">穿过本关林道，领取一件随身物品</strong>
             </div>
             <div class="objective-distance"><b id="distance">1,250</b><span>m</span></div>
           </div>
@@ -146,7 +150,7 @@
       <aside class="status-panel" aria-label="生存状态">
         <div class="status-head">
           <span class="status-label"><svg><use href="#i-heart"/></svg> 生命</span>
-          <span class="hp-readout"><b id="hpValue">100</b><small>/100</small></span>
+          <span class="hp-readout"><b id="hpValue">100</b><small>/<span id="hpMax">100</span></small></span>
         </div>
         <div class="hp-track"><span id="hpFill" class="hp-fill"></span><i class="hp-shine"></i></div>
         <div class="status-row">
@@ -157,6 +161,11 @@
           <span><svg><use href="#i-bolt"/></svg> 体力</span>
           <div class="stamina-track"><span id="staminaFill"></span></div>
         </div>
+      </aside>
+
+      <aside class="inventory-panel" id="inventoryPanel" aria-label="关卡奖励物品">
+        <div class="inventory-head"><span>沿路拾得</span><b id="itemCount">0</b></div>
+        <div class="inventory-items" id="inventoryItems"><span class="inventory-empty">尚未获得物品</span></div>
       </aside>
 
       <div class="hotbar" role="group" aria-label="随身物品">
@@ -201,9 +210,9 @@
 
       <div id="toasts" class="toasts" aria-live="polite" aria-atomic="false"></div>
       <div id="sceneTitle" class="scene-title" aria-live="polite">
-        <span class="scene-eyebrow">第一章</span>
-        <b>入 林</b>
-        <small>天光在身后熄灭了</small>
+        <span class="scene-eyebrow" id="sceneEyebrow">第 1 关</span>
+        <b id="sceneName">林 缘</b>
+        <small id="sceneSub">天光在身后熄灭了</small>
       </div>
     </div>
 
@@ -214,16 +223,16 @@
           <div class="menu-kicker"><span></span> SURVIVAL / SINGLE PLAYER <span></span></div>
           <h1><span>黑林</span><span class="title-outline">夜行</span></h1>
           <div class="title-en">NIGHTWOOD</div>
-          <p class="menu-story">林子比地图更大。天黑以后，这里只剩下一种方向——向北。<br>你带着一束手电、一把刀、一卷绳和两支急救药。别让血在黑暗里流干。</p>
+          <p class="menu-story">林子比地图更大。天黑以后，这里只剩下一种方向——向北。<br>六片地貌，30 段远征：穿过大峡谷、蛇沼、石林、灰烬林与长夜，每段林路近千米，关隘在峡谷与兽径之后。</p>
           <div class="menu-actions">
             <button id="startBtn" class="btn btn-primary" type="button">
-              <span>踏入森林</span>
+              <span>踏入第 1 关</span>
               <svg><use href="#i-arrow"/></svg>
             </button>
             <button id="howBtn" class="btn btn-quiet" type="button">生存须知</button>
           </div>
           <div class="menu-meta">
-            <span><svg><use href="#i-foot"/></svg> 约 4–7 分钟</span>
+            <span><svg><use href="#i-compass"/></svg> 6 片地貌 · 30 关远征</span>
             <span><svg><use href="#i-eye"/></svg> 单人 · 横屏体验更佳</span>
             <span class="menu-touch-tip"><svg><use href="#i-bolt"/></svg> 摇杆推到底奔跑</span>
           </div>
@@ -238,6 +247,7 @@
               <li><span class="kit-icon"><svg><use href="#i-rope"/></svg></span><div><b>绳索 ×1</b><small>在断崖处固定一条生路</small></div><em>3</em></li>
               <li><span class="kit-icon"><svg><use href="#i-knife"/></svg></span><div><b>猎刀</b><small>你唯一能还手的东西</small></div><em>LMB</em></li>
             </ul>
+            <div class="kit-note"><svg><use href="#i-torch"/></svg><span><b>30 关 · 30 件物品</b><small>每穿过一片区域、抵达关隘，从界碑后带走一件新的随身物品。</small></span></div>
           </div>
           <div class="rule-card">
             <span class="rule-mark">!</span>
@@ -266,7 +276,7 @@
           <article><span class="how-num">03</span><h3>伤口必须处理</h3><p>每次被咬都会叠加失血。失血会持续扣除生命；按 <kbd>2</kbd> 使用急救药物止血。</p></article>
           <article><span class="how-num">04</span><h3>不要恋战</h3><p>刀能逼退野兽，但你的体力有限。多数时候，跑开比杀死它更划算。</p></article>
         </div>
-        <div class="how-tip"><b>路线提示</b> 沿林间小径向北。断崖处需要按 <kbd>E</kbd> 用绳索架桥。抵达北侧林道即穿越成功。</div>
+        <div class="how-tip"><b>路线提示</b> 每关是一整片区域，关隘在近千米林路之外，不是几步路就能到。先穿过大峡谷，再经过蛇沼、石林、灰烬林、长夜和北坡；抵达关隘即可领取一件随身物品。断崖处需要按 <kbd>E</kbd> 用绳索架桥。</div>
         <button id="howStart" class="btn btn-primary" type="button"><span>开始穿越</span><svg><use href="#i-arrow"/></svg></button>
       </div>
     </section>
@@ -306,12 +316,21 @@
         <span class="modal-kicker">YOU MADE IT THROUGH</span>
         <h2 id="victoryTitle">你走出了黑森林</h2>
         <p id="victoryCopy" class="end-copy">林道尽头浮起灰蓝色的晨雾。你回头看了一眼——树影很深，但再没有东西跟上来。</p>
+        <div class="reward-card" id="rewardCard">
+          <span class="reward-icon"><svg><use id="rewardIcon" href="#i-flashlight"/></svg></span>
+          <div class="reward-copy">
+            <span>本关奖励 · 随身物品</span>
+            <b id="rewardName">强光电池</b>
+            <p id="rewardDesc">手电照射范围 +18%。</p>
+          </div>
+          <em id="rewardCount">+1</em>
+        </div>
         <div class="end-stats" id="victoryStats"></div>
         <div class="end-actions">
-          <button id="againBtn" class="btn btn-primary" type="button"><span>再穿越一次</span><svg><use href="#i-arrow"/></svg></button>
+          <button id="againBtn" class="btn btn-primary" type="button"><span>进入下一关</span><svg><use href="#i-arrow"/></svg></button>
           <button id="victoryMenuBtn" class="btn btn-quiet" type="button">返回标题</button>
         </div>
-        <small class="end-hint">结局达成 · 生还者</small>
+        <small class="end-hint" id="victoryHint">30 关 · 每过一关获得一件随身物品</small>
       </div>
     </section>
 

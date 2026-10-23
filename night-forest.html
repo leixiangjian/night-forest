@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#050b0a">
   <title>黑林夜行 · NIGHTWOOD</title>
-  <meta name="description" content="一款发生在深夜密林中的单人生存穿越小游戏。靠一束手电、一把刀、一卷绳和有限的急救药物，活着走到林道。">
+  <meta name="description" content="一款发生在深夜密林中的单人生存穿越小游戏。六片地貌、30 段林路，每关不同天气，每过一关获得一件随身物品；靠手电、猎刀、绳索和急救药物活着走到黎明。">
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%2308110d'/%3E%3Cpath d='M32 11c8 10 14 16 14 25a14 14 0 1 1-28 0c0-9 6-15 14-25z' fill='%23e2a25e'/%3E%3Cpath d='M32 26c3 5 5 8 5 12a5 5 0 0 1-10 0c0-4 2-7 5-12z' fill='%2308110d'/%3E%3C/svg%3E">
   <style>
 /* NIGHTWOOD — interface skin */
@@ -389,6 +389,67 @@ body.is-muted .icon-btn .sound-off { display: block; }
 .stamina-row svg { width: 9px; height: 9px; color: #bfad70; }
 .stamina-track { flex: 1; height: 2px; background: rgba(217, 224, 203, .09); }
 .stamina-track span { display: block; width: 100%; height: 100%; background: linear-gradient(90deg, #756e4d, #c2b781); transition: width .2s linear; }
+.objective .eyebrow b { color: var(--amber-hot); font-weight: 500; font-variant-numeric: tabular-nums; }
+.objective .eyebrow span { color: #c9c3ad; }
+
+/* level loadout — rewards earned from previous stages */
+.inventory-panel {
+  position: absolute;
+  left: 26px;
+  bottom: 164px;
+  width: 292px;
+  padding: 9px 11px 10px;
+  border: 1px solid rgba(200, 212, 187, .12);
+  border-radius: 4px;
+  background: linear-gradient(120deg, rgba(8, 15, 13, .76), rgba(8, 14, 12, .48));
+  backdrop-filter: blur(8px);
+  pointer-events: none;
+}
+.inventory-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 7px; color: #7d8f80; font-size: 8px; letter-spacing: .18em; }
+.inventory-head b { min-width: 18px; height: 16px; padding: 0 5px; display: grid; place-items: center; border: 1px solid rgba(226, 162, 94, .25); border-radius: 8px; color: var(--amber); font-size: 8px; font-weight: 500; letter-spacing: .04em; }
+.inventory-items { display: flex; flex-wrap: wrap; gap: 5px; max-height: 51px; overflow: hidden; }
+.inventory-empty { color: #5e7165; font-size: 8px; letter-spacing: .08em; padding: 3px 0; }
+.item-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  max-width: 128px;
+  padding: 3px 6px 3px 4px;
+  border: 1px solid rgba(192, 205, 178, .11);
+  border-radius: 3px;
+  background: rgba(255,255,255,.025);
+  color: #aeb7a4;
+  font-size: 7.5px;
+  letter-spacing: .03em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.item-chip svg { width: 10px; height: 10px; color: var(--amber); flex: 0 0 auto; }
+.item-chip.is-new { border-color: rgba(226,162,94,.4); color: #e2d4b4; box-shadow: 0 0 10px rgba(226,162,94,.12); }
+
+.reward-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0 auto 22px;
+  padding: 12px 14px;
+  max-width: 390px;
+  text-align: left;
+  border: 1px solid rgba(226, 162, 94, .24);
+  border-radius: 4px;
+  background: linear-gradient(100deg, rgba(226,162,94,.08), rgba(226,162,94,.018));
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.04);
+}
+.reward-icon { width: 40px; height: 40px; flex: 0 0 auto; display: grid; place-items: center; border: 1px solid rgba(226,162,94,.3); border-radius: 50%; color: var(--amber-hot); background: rgba(226,162,94,.07); }
+.reward-icon svg { width: 20px; height: 20px; }
+.reward-copy { min-width: 0; display: flex; flex-direction: column; gap: 3px; }
+.reward-copy > span { color: #9b8d71; font-size: 7px; letter-spacing: .18em; }
+.reward-copy b { color: #e9ddc2; font-size: 14px; font-weight: 500; letter-spacing: .08em; }
+.reward-copy p { margin: 0; color: #8e9d8c; font-size: 8.5px; line-height: 1.6; }
+.reward-card em { margin-left: auto; color: var(--amber); font-style: normal; font-family: var(--ui-serif); font-size: 18px; opacity: .8; }
+.end-victory.is-final .reward-card { border-color: rgba(255, 202, 129, .42); background: linear-gradient(100deg, rgba(226,162,94,.16), rgba(226,162,94,.03)); }
+.end-victory.is-final .end-mark { box-shadow: 0 0 90px rgba(226,162,94,.22); }
 
 .hotbar {
   position: absolute;
@@ -764,6 +825,11 @@ body.touch-mode .menu-meta .menu-touch-tip { display: flex; }
 .field-head span { font-family: var(--ui-serif); font-size: 15px; letter-spacing: .3em; color: #d9d8c5; }
 .field-head small { font-size: 7px; letter-spacing: .22em; color: #65786b; }
 .kit-list { list-style: none; margin: 7px 0 0; padding: 0; }
+.kit-note { display: flex; align-items: flex-start; gap: 8px; margin-top: 13px; padding-top: 12px; border-top: 1px solid rgba(201,214,190,.09); color: #9f947a; }
+.kit-note svg { width: 15px; height: 15px; flex: 0 0 auto; color: var(--amber); margin-top: 1px; }
+.kit-note span { display: flex; flex-direction: column; gap: 3px; }
+.kit-note b { font-size: 8.5px; font-weight: 500; letter-spacing: .1em; color: #d5c9ad; }
+.kit-note small { font-size: 8px; line-height: 1.6; color: #748679; letter-spacing: .02em; }
 .kit-list li {
   display: flex;
   align-items: center;
@@ -1076,7 +1142,7 @@ body.touch-mode .objective-copy strong { font-size: 10px; }
 body.touch-mode .objective-distance b { font-size: 17px; }
 body.touch-mode .top-actions { position: absolute; right: 12px; top: 12px; }
 body.touch-mode .icon-btn { width: 33px; height: 33px; }
-body.touch-mode .scene-title { top: 30%; }
+body.touch-mode .scene-title { display: none; }
 
 .rotate-hint { display: none; }
 
@@ -1137,6 +1203,12 @@ body.touch-mode .scene-title { top: 30%; }
   .end-actions .btn { width: 100%; }
   .modal-card, .end-card { padding: 26px 20px; }
   .status-panel { width: 185px; }
+  .inventory-panel { display: none; }
+  .reward-card { max-width: 100%; padding: 10px; }
+  .reward-copy b { font-size: 12px; }
+  .reward-icon { width: 34px; height: 34px; }
+  .reward-icon svg { width: 17px; height: 17px; }
+  body.touch-mode .toasts { left: auto; right: 12px; top: 80px; width: min(250px, 46vw); transform: none; align-items: flex-end; }
 }
 @media (max-height: 620px) and (min-width: 761px) {
   .menu-screen { justify-content: flex-start; padding-top: 28px; }
@@ -1150,13 +1222,14 @@ body.touch-mode .scene-title { top: 30%; }
   .field-card { padding-top: 14px; }
   .kit-list li { padding: 7px 0; }
   .rule-card { display: none; }
+  .inventory-panel { bottom: 148px; }
 }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: .001ms !important; animation-iteration-count: 1 !important; transition-duration: .001ms !important; }
   .grain { animation: none; }
 }
 
-  </style>
+</style>
 </head>
 <body>
   <div id="app">
@@ -1252,6 +1325,10 @@ body.touch-mode .scene-title { top: 30%; }
         <symbol id="i-chevron" viewBox="0 0 24 24">
           <path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
         </symbol>
+        <symbol id="i-shield" viewBox="0 0 24 24">
+          <path d="M12 3l7 3v5.5c0 4.5-3 7.6-7 9.5-4-1.9-7-5-7-9.5V6l7-3z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+          <path d="M8.8 12.1l2.1 2.1 4.6-4.4" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+        </symbol>
       </defs>
     </svg>
 
@@ -1266,8 +1343,8 @@ body.touch-mode .scene-title { top: 30%; }
           <div class="objective-main">
             <span class="objective-icon"><svg><use href="#i-compass"/></svg></span>
             <div class="objective-copy">
-              <span class="eyebrow">当前目标 · 向北</span>
-              <strong>穿过黑森林，抵达北侧林道</strong>
+              <span class="eyebrow">第 <b id="levelNum">1</b> / 30 关 · <span id="levelName">林缘</span></span>
+              <strong id="objectiveText">穿过本关林道，领取一件随身物品</strong>
             </div>
             <div class="objective-distance"><b id="distance">1,250</b><span>m</span></div>
           </div>
@@ -1295,7 +1372,7 @@ body.touch-mode .scene-title { top: 30%; }
       <aside class="status-panel" aria-label="生存状态">
         <div class="status-head">
           <span class="status-label"><svg><use href="#i-heart"/></svg> 生命</span>
-          <span class="hp-readout"><b id="hpValue">100</b><small>/100</small></span>
+          <span class="hp-readout"><b id="hpValue">100</b><small>/<span id="hpMax">100</span></small></span>
         </div>
         <div class="hp-track"><span id="hpFill" class="hp-fill"></span><i class="hp-shine"></i></div>
         <div class="status-row">
@@ -1306,6 +1383,11 @@ body.touch-mode .scene-title { top: 30%; }
           <span><svg><use href="#i-bolt"/></svg> 体力</span>
           <div class="stamina-track"><span id="staminaFill"></span></div>
         </div>
+      </aside>
+
+      <aside class="inventory-panel" id="inventoryPanel" aria-label="关卡奖励物品">
+        <div class="inventory-head"><span>沿路拾得</span><b id="itemCount">0</b></div>
+        <div class="inventory-items" id="inventoryItems"><span class="inventory-empty">尚未获得物品</span></div>
       </aside>
 
       <div class="hotbar" role="group" aria-label="随身物品">
@@ -1350,9 +1432,9 @@ body.touch-mode .scene-title { top: 30%; }
 
       <div id="toasts" class="toasts" aria-live="polite" aria-atomic="false"></div>
       <div id="sceneTitle" class="scene-title" aria-live="polite">
-        <span class="scene-eyebrow">第一章</span>
-        <b>入 林</b>
-        <small>天光在身后熄灭了</small>
+        <span class="scene-eyebrow" id="sceneEyebrow">第 1 关</span>
+        <b id="sceneName">林 缘</b>
+        <small id="sceneSub">天光在身后熄灭了</small>
       </div>
     </div>
 
@@ -1363,16 +1445,16 @@ body.touch-mode .scene-title { top: 30%; }
           <div class="menu-kicker"><span></span> SURVIVAL / SINGLE PLAYER <span></span></div>
           <h1><span>黑林</span><span class="title-outline">夜行</span></h1>
           <div class="title-en">NIGHTWOOD</div>
-          <p class="menu-story">林子比地图更大。天黑以后，这里只剩下一种方向——向北。<br>你带着一束手电、一把刀、一卷绳和两支急救药。别让血在黑暗里流干。</p>
+          <p class="menu-story">林子比地图更大。天黑以后，这里只剩下一种方向——向北。<br>六片地貌，30 段远征：穿过大峡谷、蛇沼、石林、灰烬林与长夜，每段林路近千米，关隘在峡谷与兽径之后。</p>
           <div class="menu-actions">
             <button id="startBtn" class="btn btn-primary" type="button">
-              <span>踏入森林</span>
+              <span>踏入第 1 关</span>
               <svg><use href="#i-arrow"/></svg>
             </button>
             <button id="howBtn" class="btn btn-quiet" type="button">生存须知</button>
           </div>
           <div class="menu-meta">
-            <span><svg><use href="#i-foot"/></svg> 约 4–7 分钟</span>
+            <span><svg><use href="#i-compass"/></svg> 6 片地貌 · 30 关远征</span>
             <span><svg><use href="#i-eye"/></svg> 单人 · 横屏体验更佳</span>
             <span class="menu-touch-tip"><svg><use href="#i-bolt"/></svg> 摇杆推到底奔跑</span>
           </div>
@@ -1387,6 +1469,7 @@ body.touch-mode .scene-title { top: 30%; }
               <li><span class="kit-icon"><svg><use href="#i-rope"/></svg></span><div><b>绳索 ×1</b><small>在断崖处固定一条生路</small></div><em>3</em></li>
               <li><span class="kit-icon"><svg><use href="#i-knife"/></svg></span><div><b>猎刀</b><small>你唯一能还手的东西</small></div><em>LMB</em></li>
             </ul>
+            <div class="kit-note"><svg><use href="#i-torch"/></svg><span><b>30 关 · 30 件物品</b><small>每穿过一片区域、抵达关隘，从界碑后带走一件新的随身物品。</small></span></div>
           </div>
           <div class="rule-card">
             <span class="rule-mark">!</span>
@@ -1415,7 +1498,7 @@ body.touch-mode .scene-title { top: 30%; }
           <article><span class="how-num">03</span><h3>伤口必须处理</h3><p>每次被咬都会叠加失血。失血会持续扣除生命；按 <kbd>2</kbd> 使用急救药物止血。</p></article>
           <article><span class="how-num">04</span><h3>不要恋战</h3><p>刀能逼退野兽，但你的体力有限。多数时候，跑开比杀死它更划算。</p></article>
         </div>
-        <div class="how-tip"><b>路线提示</b> 沿林间小径向北。断崖处需要按 <kbd>E</kbd> 用绳索架桥。抵达北侧林道即穿越成功。</div>
+        <div class="how-tip"><b>路线提示</b> 每关是一整片区域，关隘在近千米林路之外，不是几步路就能到。先穿过大峡谷，再经过蛇沼、石林、灰烬林、长夜和北坡；抵达关隘即可领取一件随身物品。断崖处需要按 <kbd>E</kbd> 用绳索架桥。</div>
         <button id="howStart" class="btn btn-primary" type="button"><span>开始穿越</span><svg><use href="#i-arrow"/></svg></button>
       </div>
     </section>
@@ -1455,12 +1538,21 @@ body.touch-mode .scene-title { top: 30%; }
         <span class="modal-kicker">YOU MADE IT THROUGH</span>
         <h2 id="victoryTitle">你走出了黑森林</h2>
         <p id="victoryCopy" class="end-copy">林道尽头浮起灰蓝色的晨雾。你回头看了一眼——树影很深，但再没有东西跟上来。</p>
+        <div class="reward-card" id="rewardCard">
+          <span class="reward-icon"><svg><use id="rewardIcon" href="#i-flashlight"/></svg></span>
+          <div class="reward-copy">
+            <span>本关奖励 · 随身物品</span>
+            <b id="rewardName">强光电池</b>
+            <p id="rewardDesc">手电照射范围 +18%。</p>
+          </div>
+          <em id="rewardCount">+1</em>
+        </div>
         <div class="end-stats" id="victoryStats"></div>
         <div class="end-actions">
-          <button id="againBtn" class="btn btn-primary" type="button"><span>再穿越一次</span><svg><use href="#i-arrow"/></svg></button>
+          <button id="againBtn" class="btn btn-primary" type="button"><span>进入下一关</span><svg><use href="#i-arrow"/></svg></button>
           <button id="victoryMenuBtn" class="btn btn-quiet" type="button">返回标题</button>
         </div>
-        <small class="end-hint">结局达成 · 生还者</small>
+        <small class="end-hint" id="victoryHint">30 关 · 每过一关获得一件随身物品</small>
       </div>
     </section>
 
@@ -1501,6 +1593,118 @@ body.touch-mode .scene-title { top: 30%; }
   const PLAYER_SPRINT_SPEED = 292;
   const KNIFE_RANGE = 76;
   const KNIFE_ARC = 1.02;
+  const LEVEL_COUNT = 30;
+  const LEVEL_GOAL_START = 1900;
+  const CHAPTER_SIZE = 5;
+
+  const CHAPTERS = [
+    { name: '黑森林', goal: '北侧峡谷', tag: 'BLACKWOOD', tint: 'rgba(24,54,42,.045)', darkness: 0, marsh: null, extra: [] },
+    { name: '蛇沼', goal: '蛇沼彼岸', tag: 'SERPENT MIRE', tint: 'rgba(28,64,48,.08)', darkness: .012, marsh: [5600, 4300], extra: ['snake', 'snake', 'snake'] },
+    { name: '石林', goal: '石林尽头', tag: 'STONE MAZE', tint: 'rgba(62,73,64,.07)', darkness: .008, marsh: null, extra: ['boar', 'wolf'] },
+    { name: '灰烬林', goal: '灰烬边界', tag: 'ASHEN WOOD', tint: 'rgba(92,52,30,.06)', darkness: .015, marsh: null, extra: ['wolf', 'wolf'] },
+    { name: '长夜', goal: '长夜尽头', tag: 'THE LONG NIGHT', tint: 'rgba(10,26,32,.10)', darkness: .03, marsh: null, extra: ['wolf', 'snake', 'boar'] },
+    { name: '北坡', goal: '北坡林道', tag: 'NORTH SLOPE', tint: 'rgba(34,50,58,.09)', darkness: .02, marsh: null, extra: ['wolf', 'wolf', 'wolf'] }
+  ];
+
+  const WEATHER_TYPES = {
+    clear: { rain: 0, snow: 0, fog: .08, wind: .28, ash: 0, storm: 0, tint: 'rgba(38,72,58,.025)', visibility: 1, speed: 1, sense: 1, stamina: 1 },
+    mist: { rain: 0, snow: 0, fog: .44, wind: .18, ash: 0, storm: 0, tint: 'rgba(98,124,107,.06)', visibility: .88, speed: 1, sense: .92, stamina: 1 },
+    drizzle: { rain: .36, snow: 0, fog: .25, wind: .35, ash: 0, storm: 0, tint: 'rgba(42,76,74,.06)', visibility: .9, speed: .98, sense: .86, stamina: 1.04 },
+    fog: { rain: 0, snow: 0, fog: .82, wind: .08, ash: 0, storm: 0, tint: 'rgba(126,142,132,.09)', visibility: .7, speed: .97, sense: .78, stamina: 1 },
+    wind: { rain: 0, snow: 0, fog: .16, wind: .92, ash: 0, storm: 0, tint: 'rgba(52,78,70,.04)', visibility: .96, speed: .96, sense: 1, stamina: 1.14 },
+    marsh: { rain: .12, snow: 0, fog: .66, wind: .12, ash: 0, storm: 0, tint: 'rgba(35,86,66,.1)', visibility: .74, speed: .94, sense: .8, stamina: 1.04 },
+    rain: { rain: .7, snow: 0, fog: .3, wind: .55, ash: 0, storm: 0, tint: 'rgba(38,68,78,.08)', visibility: .82, speed: .94, sense: .78, stamina: 1.08 },
+    storm: { rain: .95, snow: 0, fog: .38, wind: .85, ash: 0, storm: .85, tint: 'rgba(34,50,65,.11)', visibility: .72, speed: .9, sense: .66, stamina: 1.12 },
+    ash: { rain: 0, snow: 0, fog: .3, wind: .42, ash: .8, storm: 0, tint: 'rgba(103,60,35,.08)', visibility: .78, speed: .95, sense: .86, stamina: 1.04 },
+    snow: { rain: 0, snow: .62, fog: .24, wind: .26, ash: 0, storm: 0, tint: 'rgba(114,140,155,.08)', visibility: .84, speed: .92, sense: .8, stamina: 1.03 },
+    blizzard: { rain: 0, snow: 1, fog: .46, wind: .9, ash: 0, storm: 0, tint: 'rgba(134,160,174,.12)', visibility: .64, speed: .82, sense: .7, stamina: 1.18 },
+    sleet: { rain: .38, snow: .42, fog: .36, wind: .6, ash: 0, storm: 0, tint: 'rgba(98,126,138,.1)', visibility: .74, speed: .88, sense: .76, stamina: 1.1 }
+  };
+  const WEATHER_NAMES = [
+    '晴夜', '薄雾', '细雨', '浓雾', '山风', '蛇沼瘴气', '闷热雨', '蛙鸣雾', '湿冷雾', '雷雨',
+    '石尘风', '冷月', '穿林风', '石雾', '石林雷雨', '灰烬风', '余烬雨', '烟霾', '热风', '火星夜',
+    '静夜', '寒露', '霜雾', '极暗', '北风', '雪粒', '暴雪', '冰雾', '冻雨', '黎明雪'
+  ];
+  const WEATHER_TYPE_SEQ = [
+    'clear', 'mist', 'drizzle', 'fog', 'wind', 'marsh', 'rain', 'marsh', 'fog', 'storm',
+    'wind', 'clear', 'wind', 'fog', 'storm', 'ash', 'rain', 'ash', 'wind', 'ash',
+    'clear', 'mist', 'fog', 'clear', 'wind', 'snow', 'blizzard', 'fog', 'sleet', 'snow'
+  ];
+  const WEATHERS = WEATHER_NAMES.map((name, i) => ({
+    name,
+    ...WEATHER_TYPES[WEATHER_TYPE_SEQ[i]],
+    intensity: .7 + (i % 4) * .1
+  }));
+
+  const LEVEL_NAMES = [
+    '林缘', '鹿径', '蕨谷', '低语', '雾洼', '枯木坡', '狼渡', '石脊', '暗溪', '断枝林',
+    '蛇影', '旧营地', '黑苔', '风坳', '月影', '兽径', '深窟', '倒木谷', '断崖', '雾桥',
+    '北坡', '冷杉', '石阵', '灰烬地', '长夜', '林道', '风声', '无灯', '最后一段', '黎明'
+  ];
+  const LEVEL_SUBTITLES = [
+    '天光刚熄，林缘还很安静', '鹿蹄印通向更深的黑暗', '蕨叶擦过裤脚，像有人在跟',
+    '低语藏在每一阵风里', '雾贴着地面，路只剩一条线', '枯木横斜，踩上去会响',
+    '这里叫狼渡。名字不是白来的', '石脊裸露，脚下没有软土', '水声很近，却看不见溪',
+    '断枝像肋骨一样支向天空', '蛇影盘在暗处，别伸手', '有人在这里生过火，又匆匆离开',
+    '苔藓吞掉了所有脚印', '风从坳口灌下来，带着腥气', '月亮被树冠切成碎片',
+    '兽径上的爪印还是新的', '窟口很深，呼吸声有回音', '倒木叠成一道又一道墙',
+    '断崖横在面前，绳索只剩一次机会', '雾从桥下漫上来，看不见底',
+    '北坡更冷，野兽也更饿', '冷杉针叶落满肩头', '石阵里的眼睛会跟着你转',
+    '灰烬地还留着余温', '长夜最深的一段，连风都停了', '林道在前，但不会轻易放你走',
+    '风声里混进了脚步', '灯灭了，只剩耳朵和刀', '最后一段路，别回头', '黎明就在林道尽头'
+  ];
+
+  const DEFAULT_MODS = {
+    speed: 0, sprint: 0, armor: 0, knife: 0, atkSpeed: 0, staminaCost: 0,
+    stamRegen: 0, stamMax: 0, maxHp: 0, bleed: 0, light: 0, detect: 0,
+    noise: 0, meds: 0, ropes: 0, shield: 0
+  };
+
+  const LEVEL_ITEMS = [
+    { name: '强光电池', icon: 'flashlight', desc: '手电照射范围 +18%，更容易看清前路。', mods: { light: .18 } },
+    { name: '疾行绑腿', icon: 'foot', desc: '移动速度 +6%，赶路更轻快。', mods: { speed: .06 } },
+    { name: '防割护臂', icon: 'shield', desc: '受到野兽伤害 -8%。', mods: { armor: .08 } },
+    { name: '磨刀石', icon: 'knife', desc: '猎刀伤害 +12%，更容易逼退野兽。', mods: { knife: .12 } },
+    { name: '静音软底鞋', icon: 'foot', desc: '动物的警觉范围 -8%。', mods: { detect: .08 } },
+    { name: '急救绷带', icon: 'medkit', desc: '最大生命 +15。', mods: { maxHp: 15 } },
+    { name: '止血草药', icon: 'drop', desc: '失血速度 -18%，伤口不再那么致命。', mods: { bleed: .18 } },
+    { name: '轻便水壶', icon: 'bolt', desc: '体力恢复速度 +25%。', mods: { stamRegen: .25 } },
+    { name: '铜制护符', icon: 'shield', desc: '每关抵挡一次野兽伤害。', mods: { shield: 1 } },
+    { name: '远光透镜', icon: 'flashlight', desc: '手电照射范围 +15%。', mods: { light: .15 } },
+    { name: '备用电池组', icon: 'flashlight', desc: '手电范围 +10%，警觉范围 -3%。', mods: { light: .10, detect: .03 } },
+    { name: '兽骨哨', icon: 'leaf', desc: '动物警觉范围 -10%。', mods: { detect: .10 } },
+    { name: '铁皮护胸', icon: 'shield', desc: '受到野兽伤害 -10%。', mods: { armor: .10 } },
+    { name: '猎刀配重', icon: 'knife', desc: '挥刀速度 +12%。', mods: { atkSpeed: .12 } },
+    { name: '软皮手套', icon: 'leaf', desc: '挥刀体力消耗 -20%。', mods: { staminaCost: .20 } },
+    { name: '蛇药', icon: 'drop', desc: '受到伤害 -6%，失血速度 -6%。', mods: { armor: .06, bleed: .06 } },
+    { name: '狼牙项链', icon: 'shield', desc: '受到野兽伤害 -8%。', mods: { armor: .08 } },
+    { name: '野猪皮甲', icon: 'shield', desc: '受到野兽伤害 -10%。', mods: { armor: .10 } },
+    { name: '星光罗盘', icon: 'compass', desc: '手电范围 +10%，动物警觉 -3%。', mods: { light: .10, detect: .03 } },
+    { name: '静音斗篷', icon: 'leaf', desc: '奔跑时产生的噪音 -25%。', mods: { noise: .25 } },
+    { name: '备用刀鞘', icon: 'knife', desc: '挥刀速度 +10%。', mods: { atkSpeed: .10 } },
+    { name: '急救药箱', icon: 'medkit', desc: '每关额外携带 1 支急救药。', mods: { meds: 1 } },
+    { name: '护心镜', icon: 'shield', desc: '每关抵挡一次伤害，受到伤害 -4%。', mods: { shield: 1, armor: .04 } },
+    { name: '猎手靴', icon: 'foot', desc: '奔跑速度 +8%。', mods: { sprint: .08 } },
+    { name: '蜂蜜干粮', icon: 'bolt', desc: '最大体力 +20，体力恢复 +10%。', mods: { stamMax: 20, stamRegen: .10 } },
+    { name: '银制刀锋', icon: 'knife', desc: '猎刀伤害 +15%。', mods: { knife: .15 } },
+    { name: '夜行者披风', icon: 'eye', desc: '动物警觉 -10%，奔跑噪音 -10%。', mods: { detect: .10, noise: .10 } },
+    { name: '强心剂', icon: 'heart', desc: '最大生命 +20。', mods: { maxHp: 20 } },
+    { name: '黎明护符', icon: 'shield', desc: '受到伤害 -12%，最大生命 +10。', mods: { armor: .12, maxHp: 10 } },
+    { name: '林道徽章', icon: 'torch', desc: '穿越者徽章。移速 +5%，生命 +10，每关抵挡一次伤害。', mods: { speed: .05, maxHp: 10, shield: 1 } }
+  ];
+
+  const LEVELS = LEVEL_NAMES.map((name, i) => {
+    const chapterIndex = Math.floor(i / CHAPTER_SIZE);
+    return {
+      num: i + 1,
+      name,
+      subtitle: LEVEL_SUBTITLES[i],
+      chapterIndex,
+      chapter: CHAPTERS[chapterIndex],
+      goalY: LEVEL_GOAL_START - chapterIndex * 240 - (i % CHAPTER_SIZE) * 40,
+      reward: LEVEL_ITEMS[i]
+    };
+  });
 
   const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
   const lerp = (a, b, t) => a + (b - a) * t;
@@ -1588,10 +1792,16 @@ body.touch-mode .scene-title { top: 30%; }
     victoryMenuBtn: document.getElementById('victoryMenuBtn'),
     soundBtn: document.getElementById('soundBtn'),
     distance: document.getElementById('distance'),
+    levelNum: document.getElementById('levelNum'),
+    levelName: document.getElementById('levelName'),
+    objectiveText: document.getElementById('objectiveText'),
     progressFill: document.getElementById('progressFill'),
     progressGlow: document.getElementById('progressGlow'),
     compassArrow: document.getElementById('compassArrow'),
+    itemCount: document.getElementById('itemCount'),
+    inventoryItems: document.getElementById('inventoryItems'),
     hpValue: document.getElementById('hpValue'),
+    hpMax: document.getElementById('hpMax'),
     hpFill: document.getElementById('hpFill'),
     staminaFill: document.getElementById('staminaFill'),
     bleedLabel: document.getElementById('bleedLabel'),
@@ -1604,14 +1814,24 @@ body.touch-mode .scene-title { top: 30%; }
     promptSub: document.getElementById('promptSub'),
     toasts: document.getElementById('toasts'),
     sceneTitle: document.getElementById('sceneTitle'),
+    sceneEyebrow: document.getElementById('sceneEyebrow'),
+    sceneName: document.getElementById('sceneName'),
+    sceneSub: document.getElementById('sceneSub'),
     damageFlash: document.getElementById('damageFlash'),
     bleedEdge: document.getElementById('bleedEdge'),
     dangerPulse: document.getElementById('dangerPulse'),
     pauseStats: document.getElementById('pauseStats'),
     deathReason: document.getElementById('deathReason'),
     deathStats: document.getElementById('deathStats'),
+    victoryTitle: document.getElementById('victoryTitle'),
     victoryCopy: document.getElementById('victoryCopy'),
     victoryStats: document.getElementById('victoryStats'),
+    victoryHint: document.getElementById('victoryHint'),
+    rewardCard: document.getElementById('rewardCard'),
+    rewardIcon: document.getElementById('rewardIcon'),
+    rewardName: document.getElementById('rewardName'),
+    rewardDesc: document.getElementById('rewardDesc'),
+    rewardCount: document.getElementById('rewardCount'),
     touchStick: document.getElementById('touchStick'),
     stickKnob: document.getElementById('stickKnob'),
     touchMed: document.querySelector('[data-touch="med"]'),
@@ -1648,6 +1868,11 @@ body.touch-mode .scene-title { top: 30%; }
       this.heartTimer = 1.2;
       this.growlTimer = 3;
       this.lastStep = 0;
+      this.sprintAmount = 0;
+      this.pantTimer = .8;
+      this.rainGain = null;
+      this.snowGain = null;
+      this.ashGain = null;
     }
     init() {
       if (this.ctx) {
@@ -1705,6 +1930,64 @@ body.touch-mode .scene-title { top: 30%; }
       lfo.start();
       this.windFilter = filter;
       this.windGain = gain;
+
+      // A separate rushing-air layer for sprinting. It is silent until the
+      // player actually breaks into a run, then opens up with speed.
+      const sprintSrc = c.createBufferSource();
+      sprintSrc.buffer = this.noiseBuffer;
+      sprintSrc.loop = true;
+      const sprintFilter = c.createBiquadFilter();
+      sprintFilter.type = 'bandpass';
+      sprintFilter.frequency.value = 520;
+      sprintFilter.Q.value = .75;
+      const sprintGain = c.createGain();
+      sprintGain.gain.value = .0001;
+      sprintSrc.connect(sprintFilter).connect(sprintGain).connect(this.master);
+      sprintSrc.start();
+      this.sprintFilter = sprintFilter;
+      this.sprintGain = sprintGain;
+
+      const weatherLayer = (type, freq, q, gainValue) => {
+        const src = c.createBufferSource();
+        src.buffer = this.noiseBuffer;
+        src.loop = true;
+        const filter = c.createBiquadFilter();
+        filter.type = type;
+        filter.frequency.value = freq;
+        filter.Q.value = q;
+        const gain = c.createGain();
+        gain.gain.value = .0001;
+        src.connect(filter).connect(gain).connect(this.master);
+        src.start();
+        return { gain, filter, src };
+      };
+      this.rainLayer = weatherLayer('highpass', 1500, .6, 0);
+      this.snowLayer = weatherLayer('lowpass', 340, .7, 0);
+      this.ashLayer = weatherLayer('bandpass', 1800, 1.1, 0);
+      this.rainGain = this.rainLayer.gain;
+      this.snowGain = this.snowLayer.gain;
+      this.ashGain = this.ashLayer.gain;
+    }
+    setWeather(w) {
+      if (!this.ctx || !this.rainGain) return;
+      const t = this.ctx.currentTime;
+      const rain = w ? (w.rain || 0) : 0;
+      const snow = w ? (w.snow || 0) : 0;
+      const ash = w ? (w.ash || 0) : 0;
+      this.rainGain.gain.setTargetAtTime(.0001 + rain * .038, t, 1.4);
+      this.snowGain.gain.setTargetAtTime(.0001 + snow * .012, t, 2.0);
+      this.ashGain.gain.setTargetAtTime(.0001 + ash * .015, t, 1.8);
+      if (this.windGain) {
+        const wind = w ? (w.wind || 0) : .3;
+        this.windGain.gain.setTargetAtTime(.0001 + wind * .045, t, 1.8);
+      }
+    }
+    thunder(strength = 1) {
+      if (!this.ctx) return;
+      const v = clamp(strength, .2, 1);
+      this.noise(1.8, { gain: .035 * v, freq: 90, toFreq: 38, filter: 'lowpass', delay: .12 });
+      this.tone(44, 2.1, { gain: .04 * v, type: 'sine', to: 25, delay: .1 });
+      this.noise(.5, { gain: .018 * v, freq: 600, toFreq: 120, filter: 'lowpass', delay: .35 });
     }
     buildDrone() {
       const c = this.ctx;
@@ -1761,6 +2044,20 @@ body.touch-mode .scene-title { top: 30%; }
       this.paused = !!v;
       this.applyMaster();
     }
+    setSprint(v) {
+      this.sprintAmount = clamp(v || 0, 0, 1);
+      if (!this.ctx || !this.sprintGain) return;
+      const t = this.ctx.currentTime;
+      this.sprintGain.gain.setTargetAtTime(.0001 + this.sprintAmount * .052, t, .09);
+      if (this.sprintFilter) {
+        this.sprintFilter.frequency.setTargetAtTime(460 + this.sprintAmount * 980, t, .12);
+      }
+    }
+    sprintWhoosh() {
+      this.noise(.46, { gain: .055, freq: 280, toFreq: 1450, filter: 'bandpass', q: 1.1 });
+      this.noise(.24, { gain: .026, freq: 1600, toFreq: 260, filter: 'highpass', delay: .07 });
+      this.tone(84, .34, { gain: .026, type: 'sine', to: 48 });
+    }
     setDanger(v) {
       this.danger = clamp(v, 0, 1);
       if (!this.ctx || !this.dangerGain) return;
@@ -1788,7 +2085,13 @@ body.touch-mode .scene-title { top: 30%; }
         node.connect(f);
         node = f;
       }
-      node.connect(gain).connect(this.master);
+      if (opts.pan != null && c.createStereoPanner) {
+        const pan = c.createStereoPanner();
+        pan.pan.value = clamp(opts.pan, -1, 1);
+        node.connect(gain).connect(pan).connect(this.master);
+      } else {
+        node.connect(gain).connect(this.master);
+      }
       osc.start(t);
       osc.stop(t + dur + 0.03);
     }
@@ -1809,7 +2112,13 @@ body.touch-mode .scene-title { top: 30%; }
       gain.gain.setValueAtTime(0.0001, t);
       gain.gain.exponentialRampToValueAtTime(Math.max(0.0002, peak), t + 0.01);
       gain.gain.exponentialRampToValueAtTime(0.0001, t + dur);
-      src.connect(filter).connect(gain).connect(this.master);
+      if (opts.pan != null && c.createStereoPanner) {
+        const pan = c.createStereoPanner();
+        pan.pan.value = clamp(opts.pan, -1, 1);
+        src.connect(filter).connect(gain).connect(pan).connect(this.master);
+      } else {
+        src.connect(filter).connect(gain).connect(this.master);
+      }
       src.start(t, Math.random() * 1.5);
       src.stop(t + dur + 0.03);
     }
@@ -1818,8 +2127,12 @@ body.touch-mode .scene-title { top: 30%; }
       const now = this.ctx.currentTime;
       if (now - this.lastStep < 0.075) return;
       this.lastStep = now;
-      this.noise(0.085, { gain: sprint ? 0.038 : 0.021, freq: sprint ? 620 : 390, toFreq: 120, filter: 'lowpass' });
-      this.tone(sprint ? 72 : 60, 0.07, { gain: 0.012, type: 'sine', to: 42 });
+      this.noise(0.085, { gain: sprint ? 0.052 : 0.021, freq: sprint ? 720 : 390, toFreq: 110, filter: 'lowpass' });
+      this.tone(sprint ? 64 : 60, 0.09, { gain: sprint ? 0.022 : 0.012, type: 'sine', to: 38 });
+      if (sprint) {
+        this.noise(0.055, { gain: .018, freq: 2300, toFreq: 620, filter: 'highpass' });
+        this.tone(132, .045, { gain: .009, type: 'triangle', to: 74, delay: .016 });
+      }
     }
     knife() {
       this.noise(0.15, { gain: 0.055, freq: 2600, toFreq: 380, filter: 'bandpass', q: 0.9 });
@@ -1836,6 +2149,60 @@ body.touch-mode .scene-title { top: 30%; }
     growl(close = false) {
       this.tone(close ? 84 : 68, 0.55, { gain: close ? 0.075 : 0.038, type: 'sawtooth', to: 38, filter: 'lowpass', cutoff: close ? 480 : 320 });
       this.noise(0.5, { gain: close ? 0.028 : 0.013, freq: 240, toFreq: 80, filter: 'lowpass' });
+    }
+    wolfHowl(pan = 0, vol = 1) {
+      const v = clamp(vol, 0, 1);
+      // a thin, wavering fundamental with a breathy upper harmonic
+      this.tone(196 + Math.random() * 22, 1.55, { gain: .052 * v, type: 'sine', to: 328, filter: 'bandpass', cutoff: 740, pan });
+      this.tone(294, 1.2, { gain: .018 * v, type: 'triangle', to: 410, delay: .18, filter: 'bandpass', cutoff: 950, pan });
+      this.noise(1.35, { gain: .011 * v, freq: 680, toFreq: 340, filter: 'bandpass', q: 2.2, pan });
+    }
+    wolfSnarl(pan = 0, vol = 1) {
+      const v = clamp(vol, 0, 1);
+      this.tone(112, .34, { gain: .055 * v, type: 'sawtooth', to: 62, filter: 'lowpass', cutoff: 430, pan });
+      this.noise(.4, { gain: .032 * v, freq: 720, toFreq: 190, filter: 'bandpass', q: 1.6, pan });
+      this.tone(188, .19, { gain: .018 * v, type: 'square', to: 118, filter: 'lowpass', cutoff: 540, delay: .16, pan });
+    }
+    boarGrunt(pan = 0, vol = 1) {
+      const v = clamp(vol, 0, 1);
+      this.tone(74, .22, { gain: .07 * v, type: 'sawtooth', to: 46, filter: 'lowpass', cutoff: 300, pan });
+      this.noise(.24, { gain: .042 * v, freq: 240, toFreq: 90, filter: 'lowpass', pan });
+      this.tone(61, .17, { gain: .038 * v, type: 'square', to: 38, filter: 'lowpass', cutoff: 260, delay: .18, pan });
+    }
+    boarSnort(pan = 0, vol = 1) {
+      const v = clamp(vol, 0, 1);
+      this.noise(.18, { gain: .05 * v, freq: 680, toFreq: 220, filter: 'bandpass', q: 1.2, pan });
+      this.noise(.13, { gain: .032 * v, freq: 420, toFreq: 150, filter: 'lowpass', delay: .16, pan });
+    }
+    snakeHiss(pan = 0, vol = 1) {
+      const v = clamp(vol, 0, 1);
+      this.noise(.58, { gain: .028 * v, freq: 5200, toFreq: 2600, filter: 'highpass', pan });
+      this.noise(.4, { gain: .011 * v, freq: 3800, toFreq: 2200, filter: 'bandpass', q: 2.4, delay: .12, pan });
+    }
+    animalAlert(type, pan = 0, vol = 1) {
+      if (type === 'wolf') {
+        if (Math.random() < .42) this.wolfHowl(pan, vol);
+        else this.wolfSnarl(pan, vol);
+      } else if (type === 'boar') {
+        if (Math.random() < .38) this.boarSnort(pan, vol);
+        else this.boarGrunt(pan, vol);
+      } else {
+        this.snakeHiss(pan, vol);
+      }
+    }
+    animalStep(type, pan = 0, vol = 1) {
+      const v = clamp(vol, 0, 1);
+      if (type === 'snake') {
+        this.noise(.16, { gain: .008 * v, freq: 2800, toFreq: 1600, filter: 'highpass', pan });
+        return;
+      }
+      if (type === 'boar') {
+        this.tone(52, .12, { gain: .018 * v, type: 'sine', to: 30, pan });
+        this.noise(.12, { gain: .012 * v, freq: 500, toFreq: 140, filter: 'lowpass', pan });
+      } else {
+        this.tone(68, .08, { gain: .008 * v, type: 'sine', to: 42, pan });
+        this.noise(.09, { gain: .01 * v, freq: 1600, toFreq: 500, filter: 'bandpass', pan });
+      }
     }
     heal() {
       [392, 523.25, 659.25].forEach((f, i) => this.tone(f, 0.65, { gain: 0.033, delay: i * 0.075, type: 'sine' }));
@@ -1888,8 +2255,17 @@ body.touch-mode .scene-title { top: 30%; }
       }
       this.growlTimer -= dt;
       if (this.growlTimer <= 0 && this.danger > 0.3) {
-        this.growlTimer = rand(2.4, 5.2);
-        this.growl(this.danger > 0.75);
+        this.growlTimer = rand(2.8, 5.8);
+        // a far-off animal answer, panned away from the player
+        this.animalAlert(Math.random() < .72 ? 'wolf' : 'boar', rand(-.75, .75), .22 + this.danger * .25);
+      }
+      this.pantTimer -= dt;
+      if (this.pantTimer <= 0) {
+        this.pantTimer = (G.player && G.player.stamina < 24) ? .72 : 1.25;
+        if (G.state === 'playing' && G.player && (G.player.sprintBlend > .3 || G.player.stamina < 24)) {
+          this.noise(.32, { gain: .013 + (G.player.sprintBlend || 0) * .012, freq: 620, toFreq: 260, filter: 'bandpass', q: 1.1 });
+          this.tone(118, .18, { gain: .005, type: 'sine', to: 78, delay: .09 });
+        }
       }
     }
   }
@@ -2153,8 +2529,9 @@ body.touch-mode .scene-title { top: 30%; }
     const tile = makeGroundTile(seed);
     world.groundPattern = ctx.createPattern(tile, 'repeat');
 
-    // Trees
-    const targetTrees = 1040;
+    // Trees — each chapter has a different density and silhouette mix.
+    const ch = chapterData(G.level);
+    const targetTrees = ch.name === '石林' ? 760 : ch.name === '蛇沼' ? 920 : ch.name === '灰烬林' ? 980 : 1040;
     let attempts = 0;
     while (world.trees.length < targetTrees && attempts < 7600) {
       attempts++;
@@ -2169,8 +2546,8 @@ body.touch-mode .scene-title { top: 30%; }
       world.trees.push(createTree(rng, x, y));
     }
 
-    // Rocks
-    const targetRocks = 140;
+    // Rocks — the Stone Maze is noticeably denser.
+    const targetRocks = ch.name === '石林' ? 280 : 140;
     attempts = 0;
     while (world.rocks.length < targetRocks && attempts < 1500) {
       attempts++;
@@ -2328,10 +2705,12 @@ body.touch-mode .scene-title { top: 30%; }
         }
         if (!placed) continue;
         const cfg = ANIMAL_TYPES[type];
+        const levelMul = 1 + (G.level - 1) * .018;
         world.animals.push({
           id: world.animals.length + 1,
           type, x: placed.x, y: placed.y, homeX: placed.x, homeY: placed.y,
-          hp: cfg.hp, maxHp: cfg.hp, radius: cfg.radius,
+          hp: cfg.hp * levelMul, maxHp: cfg.hp * levelMul, radius: cfg.radius,
+          damage: cfg.damage * (1 + (G.level - 1) * .012),
           angle: rng() * TAU, face: rng() * TAU,
           state: 'idle', stateT: 0, aggro: false, met: false,
           cooldown: rng() * .8, stun: 0, hitFlash: 0, dead: false, deadT: 0,
@@ -2341,6 +2720,35 @@ body.touch-mode .scene-title { top: 30%; }
           legacy: 0
         });
       }
+    }
+
+    // Chapter-specific wanderers make each region feel different.
+    for (const type of ch.extra) {
+      let placed = null;
+      for (let attempt = 0; attempt < 50; attempt++) {
+        const y = G.levelGoalY + 360 + rng() * Math.max(300, 6200 - G.levelGoalY);
+        const side = rng() < .5 ? -1 : 1;
+        const x = clamp(trailXAt(trail, y) + side * (110 + rng() * 420), 90, WORLD_W - 90);
+        if (Math.abs(y - RAVINE_Y) < RAVINE_HALF + 100) continue;
+        const spot = findFreeSpot(world, x, y, ANIMAL_TYPES[type].radius + 4, 10);
+        if (spot) { placed = spot; break; }
+      }
+      if (!placed) continue;
+      const cfg = ANIMAL_TYPES[type];
+      const levelMul = 1 + (G.level - 1) * .018;
+      world.animals.push({
+        id: world.animals.length + 1,
+        type, x: placed.x, y: placed.y, homeX: placed.x, homeY: placed.y,
+        hp: cfg.hp * levelMul, maxHp: cfg.hp * levelMul, radius: cfg.radius,
+        damage: cfg.damage * (1 + (G.level - 1) * .012),
+        angle: rng() * TAU, face: rng() * TAU,
+        state: 'idle', stateT: 0, aggro: false, met: false,
+        cooldown: rng() * .8, stun: 0, hitFlash: 0, dead: false, deadT: 0,
+        wanderAngle: rng() * TAU, wanderT: rng() * 2,
+        phase: rng() * TAU, alertT: 0, hitDone: false,
+        fleeT: 0, growlCd: 0, chargeAngle: 0,
+        legacy: 0
+      });
     }
 
     return world;
@@ -2355,6 +2763,18 @@ body.touch-mode .scene-title { top: 30%; }
     player: null,
     envTime: 0,
     runTime: 0,
+    totalTime: 0,
+    totalKills: 0,
+    level: 1,
+    levelStartY: START.y,
+    levelGoalY: LEVELS[0].goalY,
+    weather: WEATHERS[0],
+    weatherTime: 0,
+    weatherTimer: 2,
+    lightning: 0,
+    items: [],
+    mods: { ...DEFAULT_MODS },
+    ghosts: [],
     lastFrame: 0,
     seed: 0,
     camera: {
@@ -2378,22 +2798,56 @@ body.touch-mode .scene-title { top: 30%; }
     lastAimSource: 'mouse'
   };
 
+  function computeMods() {
+    const mods = { ...DEFAULT_MODS };
+    for (const item of G.items) {
+      if (!item || !item.mods) continue;
+      for (const key in item.mods) {
+        if (key in mods) mods[key] += item.mods[key];
+      }
+    }
+    mods.armor = clamp(mods.armor, 0, .72);
+    mods.bleed = clamp(mods.bleed, 0, .65);
+    mods.detect = clamp(mods.detect, 0, .55);
+    mods.noise = clamp(mods.noise, 0, .65);
+    mods.staminaCost = clamp(mods.staminaCost, 0, .45);
+    mods.shield = Math.max(0, Math.round(mods.shield));
+    G.mods = mods;
+    return mods;
+  }
+
+  function levelData(level = G.level) {
+    return LEVELS[clamp(level || 1, 1, LEVEL_COUNT) - 1];
+  }
+
+  function chapterData(level = G.level) {
+    return CHAPTERS[levelData(level).chapterIndex] || CHAPTERS[0];
+  }
+
+  function weatherData(level = G.level) {
+    return WEATHERS[clamp(level || 1, 1, LEVEL_COUNT) - 1];
+  }
+
   function makePlayer() {
+    const m = G.mods || DEFAULT_MODS;
+    const maxHp = 100 + m.maxHp;
+    const maxStamina = 100 + m.stamMax;
     return {
       x: START.x,
       y: START.y,
       radius: 12,
-      hp: 100,
-      maxHp: 100,
+      hp: maxHp,
+      maxHp,
       bleeding: 0,
-      stamina: 100,
-      maxStamina: 100,
+      stamina: maxStamina,
+      maxStamina,
       aim: -Math.PI / 2,
       face: -Math.PI / 2,
       lastMoveAngle: -Math.PI / 2,
       lightOn: true,
-      meds: 2,
-      ropes: 1,
+      meds: 2 + (m.meds || 0),
+      ropes: 1 + (m.ropes || 0),
+      shield: m.shield || 0,
       invuln: 0,
       attackCd: 0,
       attackT: 0,
@@ -2401,7 +2855,9 @@ body.touch-mode .scene-title { top: 30%; }
       walk: 0,
       moving: false,
       sprinting: false,
+      sprintBlend: 0,
       stepT: 0,
+      ghostT: 0,
       dead: false,
       won: false,
       healT: 0,
@@ -2411,18 +2867,30 @@ body.touch-mode .scene-title { top: 30%; }
     };
   }
 
-  function resetWorld(seed, menu = false) {
+  function resetWorld(seed, menu = false, level = G.level) {
     if (G.endTimeout) {
       clearTimeout(G.endTimeout);
       G.endTimeout = null;
     }
+    G.level = clamp(level || 1, 1, LEVEL_COUNT);
+    G.levelStartY = START.y;
+    G.levelGoalY = levelData(G.level).goalY;
+    G.weather = weatherData(G.level);
+    G.weatherTime = 0;
+    G.weatherTimer = 2.5 + Math.random() * 4;
+    G.lightning = 0;
+    computeMods();
     G.seed = seed;
     G.world = generateWorld(seed);
+    const goalX = trailXAt(G.world.trail, G.levelGoalY);
+    G.world.goals = { x: goalX, y: G.levelGoalY, gateX: goalX };
+    G.world.goalSign = { x: goalX + 128, y: G.levelGoalY + 64, angle: -.08 };
     G.player = makePlayer();
     G.runTime = 0;
     G.danger = 0;
     G.interaction = null;
     G.promptSignature = '';
+    G.ghosts = [];
     G.flags = {
       firstAggro: false, firstBleed: false, firstKill: false,
       ms1: false, ms2: false, ms3: false, ms4: false, bridgeUsed: false
@@ -2465,12 +2933,12 @@ body.touch-mode .scene-title { top: 30%; }
 
   function progress() {
     if (!G.player) return 0;
-    return clamp((START.y - G.player.y) / (START.y - WIN_Y), 0, 1);
+    return clamp((G.levelStartY - G.player.y) / Math.max(1, G.levelStartY - G.levelGoalY), 0, 1);
   }
 
   function currentDistance() {
     if (!G.player) return 1234;
-    return Math.max(0, (G.player.y - WIN_Y) / 5.5);
+    return Math.max(0, (G.player.y - G.levelGoalY) / 5.5);
   }
 
   // -------------------------------------------------------------------------
@@ -2493,6 +2961,10 @@ body.touch-mode .scene-title { top: 30%; }
 
   function showSceneTitle() {
     if (G.titleTimeout) clearTimeout(G.titleTimeout);
+    const lv = levelData();
+    if (ui.sceneEyebrow) ui.sceneEyebrow.textContent = `第 ${lv.num} 关 / 30 · ${lv.chapter.name} · ${G.weather.name}`;
+    if (ui.sceneName) ui.sceneName.textContent = lv.name.length >= 4 ? lv.name : lv.name.split('').join(' ');
+    if (ui.sceneSub) ui.sceneSub.textContent = lv.subtitle;
     ui.sceneTitle.classList.remove('is-visible');
     void ui.sceneTitle.offsetWidth;
     ui.sceneTitle.classList.add('is-visible');
@@ -2501,10 +2973,27 @@ body.touch-mode .scene-title { top: 30%; }
     }, 5200);
   }
 
-  function startRun() {
+  function renderInventory(newItem = null) {
+    if (!ui.inventoryItems) return;
+    const total = G.items.length;
+    if (ui.itemCount) ui.itemCount.textContent = String(total);
+    if (!total) {
+      ui.inventoryItems.innerHTML = '<span class="inventory-empty">尚未获得物品</span>';
+      return;
+    }
+    const recent = G.items.slice(-8);
+    ui.inventoryItems.innerHTML = recent.map((item) => {
+      const fresh = newItem && item === newItem ? ' is-new' : '';
+      return `<span class="item-chip${fresh}" title="${item.name}：${item.desc}"><svg><use href="#i-${item.icon}"/></svg>${item.name}</span>`;
+    }).join('');
+  }
+
+  function startLevel(level, newRun = false) {
     if (G.endTimeout) { clearTimeout(G.endTimeout); G.endTimeout = null; }
     hideAllScreens();
-    resetWorld(randomSeed(), false);
+    G.level = clamp(level || 1, 1, LEVEL_COUNT);
+    computeMods();
+    resetWorld(randomSeed(), false, G.level);
     document.body.classList.add('is-playing');
     document.body.classList.remove('is-dead-screen');
     ui.hud.classList.remove('is-hidden');
@@ -2512,26 +3001,57 @@ body.touch-mode .scene-title { top: 30%; }
     ui.pause.classList.add('is-hidden');
     ui.death.classList.add('is-hidden');
     ui.victory.classList.add('is-hidden');
+    ui.victory.classList.remove('is-final');
+    const victoryCard = ui.victory.querySelector('.end-card');
+    if (victoryCard) victoryCard.classList.remove('is-final');
     ui.howModal.classList.add('is-hidden');
     ui.toasts.innerHTML = '';
     audio.init();
     audio.setPaused(false);
     audio.setMuted(audio.muted);
     audio.setDanger(0);
+    audio.setSprint(0);
+    audio.setWeather(G.weather);
     audio.click();
     if (document.activeElement && typeof document.activeElement.blur === 'function') document.activeElement.blur();
-    G.tutorial = G.touchMode ? [
-      { at: 6.2, title: '向北，别停', text: '推动左侧摇杆移动，推到底会奔跑。沿小径向北。', icon: 'foot', kind: '' },
-      { at: 14, title: '光柱之外', text: '靠近威胁时点按右下猎刀。手电照得越远，也越容易被盯上。', icon: 'eye', kind: '' },
-      { at: 27, title: '伤口与药', text: '被咬伤后会持续失血。点按药箱按钮立即止血。', icon: 'medkit', kind: '' }
-    ] : [
-      { at: 6.2, title: '向北，别停', text: 'WASD 移动，按住 Shift 奔跑。小径会带你穿过森林。', icon: 'foot', kind: '' },
-      { at: 14, title: '光柱之外', text: '鼠标瞄准，左键挥刀。手电照得越远，也越容易被盯上。', icon: 'eye', kind: '' },
-      { at: 27, title: '伤口与药', text: '被咬伤后会持续失血。按 2 使用急救药物，先止血再赶路。', icon: 'medkit', kind: '' }
-    ];
+    if (newRun) {
+      G.tutorial = G.touchMode ? [
+        { at: 6.2, title: '向北，别停', text: '推动左侧摇杆移动，推到底会奔跑。沿小径向北。', icon: 'foot', kind: '' },
+        { at: 14, title: '光柱之外', text: '靠近威胁时点按右下猎刀。手电照得越远，也越容易被盯上。', icon: 'eye', kind: '' },
+        { at: 27, title: '伤口与药', text: '被咬伤后会持续失血。点按药箱按钮立即止血。', icon: 'medkit', kind: '' }
+      ] : [
+        { at: 6.2, title: '向北，别停', text: 'WASD 移动，按住 Shift 奔跑。小径会带你穿过森林。', icon: 'foot', kind: '' },
+        { at: 14, title: '光柱之外', text: '鼠标瞄准，左键挥刀。手电照得越远，也越容易被盯上。', icon: 'eye', kind: '' },
+        { at: 27, title: '伤口与药', text: '被咬伤后会持续失血。按 2 使用急救药物，先止血再赶路。', icon: 'medkit', kind: '' }
+      ];
+    } else {
+      G.tutorial = [];
+    }
+    renderInventory();
     showSceneTitle();
     updateHUD(true);
     updatePrompt();
+    const lv = levelData();
+    showToast(`第 ${lv.num} 关 · ${lv.name}`, lv.subtitle, 'compass', '', 3800);
+  }
+
+  function startRun() {
+    G.level = 1;
+    G.items = [];
+    G.totalTime = 0;
+    G.totalKills = 0;
+    computeMods();
+    startLevel(1, true);
+  }
+
+  function retryLevel() {
+    startLevel(G.level, false);
+  }
+
+  function advanceLevel() {
+    if (G.state !== 'won') return;
+    if (G.level < LEVEL_COUNT) startLevel(G.level + 1, false);
+    else startRun();
   }
 
   function hideAllScreens() {
@@ -2551,18 +3071,28 @@ body.touch-mode .scene-title { top: 30%; }
     document.body.classList.remove('is-playing', 'is-dead-screen');
     ui.damageFlash.style.opacity = '0';
     ui.dangerPulse.classList.remove('is-danger');
-    resetWorld(randomSeed(), true);
+    G.items = [];
+    G.level = 1;
+    G.totalTime = 0;
+    G.totalKills = 0;
+    computeMods();
+    resetWorld(randomSeed(), true, 1);
+    renderInventory();
     audio.setPaused(true);
+    audio.setSprint(0);
+    audio.setWeather(null);
     G.state = 'menu';
   }
 
   function pauseGame() {
     if (G.state !== 'playing') return;
     G.state = 'paused';
-    ui.pauseStats.innerHTML = `<span>穿越进度 <b>${Math.round(progress() * 100)}%</b></span><span>存活 <b>${formatTime(G.runTime)}</b></span><span>药物 <b>${G.player.meds}</b></span>`;
+    const lv = levelData();
+    ui.pauseStats.innerHTML = `<span>第 <b>${lv.num}</b> / 30 关</span><span>本关进度 <b>${Math.round(progress() * 100)}%</b></span><span>物品 <b>${G.items.length}</b> 件</span>`;
     ui.pause.classList.remove('is-hidden');
     ui.prompt.classList.remove('is-visible');
     G.touch.attackHeld = false;
+    audio.setSprint(0);
     audio.setPaused(true);
     audio.click();
     setTimeout(() => ui.resumeBtn.focus(), 60);
@@ -2595,11 +3125,14 @@ body.touch-mode .scene-title { top: 30%; }
     document.body.classList.add('is-dead-screen');
     ui.hud.classList.add('is-hidden');
     ui.prompt.classList.remove('is-visible');
+    const lv = levelData();
     ui.deathReason.textContent = deathReasonText(G.deathSource);
     ui.deathStats.innerHTML =
-      statHTML('穿越进度', Math.round(progress() * 100), '%') +
-      statHTML('存活时间', formatTime(G.runTime)) +
+      statHTML('关卡', `${lv.num} / 30`) +
+      statHTML('本关用时', formatTime(G.runTime)) +
       statHTML('被咬伤', G.stats.hits, '次');
+    const retryText = ui.retryBtn.querySelector('span');
+    if (retryText) retryText.textContent = `重试第 ${lv.num} 关`;
     ui.death.classList.remove('is-hidden');
     setTimeout(() => ui.retryBtn.focus(), 80);
   }
@@ -2609,14 +3142,33 @@ body.touch-mode .scene-title { top: 30%; }
     document.body.classList.remove('is-playing');
     ui.hud.classList.add('is-hidden');
     ui.prompt.classList.remove('is-visible');
-    const medsLeft = G.player.meds;
-    ui.victoryCopy.textContent = medsLeft > 0
-      ? '林道尽头浮起灰蓝色的晨雾。你回头看了一眼——树影很深，但再没有东西跟上来。口袋里的药还剩着，这次是你赢了。'
-      : '林道尽头浮起灰蓝色的晨雾。你用光了最后一支药，也走完了最后一段路。身后的森林沉默着，像终于承认了你的胜利。';
-    ui.victoryStats.innerHTML =
-      statHTML('穿越用时', formatTime(G.runTime)) +
-      statHTML('击退野兽', G.stats.kills, '只') +
-      statHTML('使用药物', G.stats.medsUsed, '支');
+    const lv = levelData();
+    const item = lv.reward;
+    const final = G.level >= LEVEL_COUNT;
+    ui.victory.classList.toggle('is-final', final);
+    const victoryCard = ui.victory.querySelector('.end-card');
+    if (victoryCard) victoryCard.classList.toggle('is-final', final);
+    ui.victoryTitle.textContent = final ? '林道尽头 · 黎明' : `第 ${lv.num} 关 · 已穿越`;
+    ui.victoryCopy.textContent = final
+      ? '三十段林路都留在了身后。晨雾从林道尽头漫过来，你把最后一盏灯留在界碑上，走了出去。'
+      : G.player.meds > 0
+        ? `你穿过${lv.chapter.name}，抵达${lv.chapter.goal}。口袋里的药还剩着，身后的树影很深，但再没有东西跟上来。`
+        : `你穿过${lv.chapter.name}，抵达${lv.chapter.goal}。药已经用尽，但这一次，森林没能留下你。`;
+    if (ui.rewardCard) ui.rewardCard.style.display = '';
+    if (ui.rewardIcon) ui.rewardIcon.setAttribute('href', `#i-${item.icon}`);
+    if (ui.rewardName) ui.rewardName.textContent = item.name;
+    if (ui.rewardDesc) ui.rewardDesc.textContent = item.desc;
+    if (ui.rewardCount) ui.rewardCount.textContent = final ? '徽章' : '+1';
+    ui.victoryStats.innerHTML = final
+      ? statHTML('总用时', formatTime(G.totalTime)) +
+        statHTML('击退野兽', G.totalKills, '只') +
+        statHTML('随身物品', G.items.length, '件')
+      : statHTML('本关用时', formatTime(G.runTime)) +
+        statHTML('击退野兽', G.stats.kills, '只') +
+        statHTML('随身物品', G.items.length, '件');
+    if (ui.victoryHint) ui.victoryHint.textContent = final ? '30 / 30 · 你走完了整片黑森林' : `下一关：第 ${lv.num + 1} 关 · ${LEVELS[lv.num].name}`;
+    const nextText = ui.againBtn.querySelector('span');
+    if (nextText) nextText.textContent = final ? '重新穿越 30 关' : `进入第 ${lv.num + 1} 关`;
     ui.victory.classList.remove('is-hidden');
     setTimeout(() => ui.againBtn.focus(), 80);
   }
@@ -2633,6 +3185,7 @@ body.touch-mode .scene-title { top: 30%; }
     ui.bleedEdge.style.opacity = '.9';
     audio.death();
     audio.setDanger(0);
+    audio.setSprint(0);
     G.touch.attackHeld = false;
     ui.prompt.classList.remove('is-visible');
     if (G.endTimeout) clearTimeout(G.endTimeout);
@@ -2645,8 +3198,15 @@ body.touch-mode .scene-title { top: 30%; }
     G.player.won = true;
     G.stats.finishedAt = performance.now();
     G.touch.attackHeld = false;
+    G.totalTime += G.runTime;
+    G.totalKills += G.stats.kills;
+    const reward = levelData().reward;
+    if (!G.items.includes(reward)) G.items.push(reward);
+    computeMods();
+    renderInventory(reward);
     audio.victory();
     audio.setDanger(0);
+    audio.setSprint(0);
     ui.prompt.classList.remove('is-visible');
     if (G.endTimeout) clearTimeout(G.endTimeout);
     G.endTimeout = setTimeout(showVictoryScreen, 1100);
@@ -2748,10 +3308,10 @@ body.touch-mode .scene-title { top: 30%; }
       const target = nearestEnemy(150, false);
       if (target) p.aim = Math.atan2(target.y - p.y, target.x - p.x);
     }
-    p.attackCd = .4;
+    p.attackCd = .4 / (1 + G.mods.atkSpeed);
     p.attackT = .23;
     p.attackAngle = p.aim;
-    p.stamina = Math.max(0, p.stamina - 10);
+    p.stamina = Math.max(0, p.stamina - 10 * (1 - G.mods.staminaCost));
     audio.knife();
     let hit = false;
     for (const a of G.world.animals) {
@@ -2760,7 +3320,7 @@ body.touch-mode .scene-title { top: 30%; }
       if (d > KNIFE_RANGE + a.radius) continue;
       const to = Math.atan2(a.y - p.y, a.x - p.x);
       if (Math.abs(angleDiff(to, p.aim)) > KNIFE_ARC) continue;
-      damageAnimal(a, 23, p.x, p.y, p.aim);
+      damageAnimal(a, 23 * (1 + G.mods.knife), p.x, p.y, p.aim);
       hit = true;
     }
     G.world.effects.push({
@@ -2870,6 +3430,17 @@ body.touch-mode .scene-title { top: 30%; }
     if (!G.player || G.state !== 'playing' || G.player.dead) return;
     const p = G.player;
     if (p.invuln > 0) return;
+    if (p.shield > 0) {
+      p.shield--;
+      p.invuln = 1.15;
+      p.hurtT = .16;
+      G.camera.shake = Math.max(G.camera.shake, 6);
+      audio.tone(760, .5, { gain: .028, type: 'sine', to: 1180, filter: 'highpass', cutoff: 800 });
+      showToast('护符替你挡下了一击', `还剩 ${p.shield} 次护符抵挡。`, 'shield', 'is-good', 2800);
+      updateHUD(true);
+      return;
+    }
+    amount *= (1 - G.mods.armor);
     p.hp -= amount;
     p.bleeding = clamp(p.bleeding + bleedAmount, 0, 3);
     p.invuln = .92;
@@ -2991,17 +3562,29 @@ body.touch-mode .scene-title { top: 30%; }
 
     let wantSprint = !!(G.keys.ShiftLeft || G.keys.ShiftRight) || (G.touchMode && G.touch.stickMag > .93);
     if (p.stamina <= 1) wantSprint = false;
+    const wasSprinting = p.sprinting;
     const sprinting = hasMove && wantSprint && p.stamina > 0;
     p.sprinting = sprinting;
+    if (sprinting && !wasSprinting) audio.sprintWhoosh();
+    p.sprintBlend = damp(p.sprintBlend || 0, sprinting ? 1 : 0, sprinting ? 11 : 7, dt);
+    audio.setSprint(p.sprintBlend);
+    const weatherStamina = G.weather ? G.weather.stamina : 1;
     if (sprinting) {
-      p.stamina = Math.max(0, p.stamina - 25 * dt);
+      p.stamina = Math.max(0, p.stamina - 25 * weatherStamina * dt);
     } else {
-      p.stamina = Math.min(p.maxStamina, p.stamina + (hasMove ? 13 : 19) * dt);
+      p.stamina = Math.min(p.maxStamina, p.stamina + (hasMove ? 13 : 19) * (1 + G.mods.stamRegen) / weatherStamina * dt);
     }
 
     const bleedSlow = 1 - Math.min(.18, p.bleeding * .045);
     const healthSlow = p.hp < 30 ? .9 : 1;
-    const speed = (sprinting ? PLAYER_SPRINT_SPEED : PLAYER_BASE_SPEED) * bleedSlow * healthSlow;
+    let targetSpeed = (sprinting ? PLAYER_SPRINT_SPEED * (1 + G.mods.sprint) : PLAYER_BASE_SPEED * (1 + G.mods.speed)) * bleedSlow * healthSlow;
+    const chapter = chapterData();
+    const marsh = chapter.marsh;
+    if (marsh && p.y >= marsh[0] && p.y <= marsh[1]) targetSpeed *= .72;
+    targetSpeed *= G.weather ? G.weather.speed : 1;
+    // A short acceleration/deceleration makes starts, stops and turns read as body weight.
+    p.currentSpeed = damp(p.currentSpeed || 0, hasMove ? targetSpeed : 0, hasMove ? 9 : 15, dt);
+    const speed = Math.max(hasMove ? 18 : 0, p.currentSpeed);
     p.moving = false;
     if (hasMove) {
       const len = Math.hypot(input.x, input.y);
@@ -3010,27 +3593,54 @@ body.touch-mode .scene-title { top: 30%; }
       const moved = moveActor(p, dx, dy);
       p.moving = moved;
       if (moved) {
-        p.walk += dt * (sprinting ? 13.5 : 8.5);
+        p.walk += speed * dt * .046;
         p.lastMoveAngle = moveAngle;
         p.stepT -= dt;
         if (p.stepT <= 0) {
-          p.stepT = sprinting ? .235 : .37;
+          p.stepT = sprinting ? .215 : .37;
+          p.stepSide = -(p.stepSide || 1);
           audio.step(sprinting);
-          spawnFootstep(p.x, p.y, sprinting);
+          const sideX = Math.cos(p.face + Math.PI / 2) * p.stepSide * 5;
+          const sideY = Math.sin(p.face + Math.PI / 2) * p.stepSide * 5;
+          spawnFootstep(p.x + sideX - Math.cos(p.face) * 5, p.y + sideY - Math.sin(p.face) * 5, sprinting);
           if (sprinting) {
-            G.world.effects.push({ type: 'noise', x: p.x, y: p.y, t: 0, life: .8, radius: 195 });
+            G.world.effects.push({ type: 'noise', x: p.x, y: p.y, t: 0, life: .8, radius: 210 });
+          }
+        }
+        if (sprinting) {
+          p.ghostT = (p.ghostT || 0) - dt;
+          if (p.ghostT <= 0) {
+            p.ghostT = .055;
+            G.ghosts.push({ x: p.x, y: p.y, face: p.face, walk: p.walk, life: .38, maxLife: .38 });
+            if (G.ghosts.length > 18) G.ghosts.shift();
+          }
+          if (Math.random() < dt * 22) {
+            G.world.particles.push({
+              type: 'leaf', x: p.x + rand(-10, 10), y: p.y + rand(0, 10),
+              vx: rand(-35, 35), vy: rand(-55, -8), rot: rand(0, TAU),
+              spin: rand(-7, 7), r: rand(1.4, 3.2), life: rand(.35, .8),
+              maxLife: .8, color: Math.random() < .5 ? '#8d8b5e' : '#5d714c'
+            });
           }
         }
       }
     } else {
       p.walk += dt * .9;
     }
-    p.face = angleLerp(p.face, p.aim, 1 - Math.exp(-11 * dt));
+    // The body follows the direction of travel; the head, flashlight and knife
+    // keep tracking the aim direction. This makes running look like running,
+    // instead of the character moon-walking toward the cursor.
+    const desiredFace = hasMove ? moveAngle : p.aim;
+    const previousFace = p.face;
+    p.face = angleLerp(p.face, desiredFace, 1 - Math.exp(-(hasMove ? 8.5 : 5.5) * dt));
+    const turnRate = angleDiff(p.face, previousFace) / Math.max(dt, .001);
+    p.bank = damp(p.bank || 0, clamp(turnRate * .028, -.16, .16), 8, dt);
+    p.moveBlend = damp(p.moveBlend || 0, hasMove && p.moving ? 1 : 0, 9, dt);
 
     // Persistent blood loss
     if (p.bleeding > 0) {
       const rates = [0, .58, 1.34, 2.32];
-      const rate = rates[p.bleeding] * (p.moving ? 1.11 : .92);
+      const rate = rates[p.bleeding] * (p.moving ? 1.11 : .92) * (1 - G.mods.bleed);
       p.hp -= rate * dt;
       if (p.hp <= 0) {
         p.hp = 0;
@@ -3062,20 +3672,30 @@ body.touch-mode .scene-title { top: 30%; }
       }
     }
 
-    if (p.y < WIN_Y && G.state === 'playing') winGame();
+    if (p.y < G.levelGoalY + 6 && G.state === 'playing') winGame();
 
     updateMilestones();
   }
 
   function spawnFootstep(x, y, sprint) {
-    const count = sprint ? 5 : 2;
+    const count = sprint ? 10 : 2;
     for (let i = 0; i < count; i++) {
       G.world.particles.push({
-        type: 'dust', x: x + rand(-5, 5), y: y + rand(-3, 7),
-        vx: rand(-18, 18), vy: rand(-16, 4),
-        r: .8 + Math.random() * 2, life: .35 + Math.random() * .3,
-        maxLife: .65, color: 'rgba(114,105,73,.55)'
+        type: 'dust', x: x + rand(-7, 7), y: y + rand(-3, 9),
+        vx: rand(sprint ? -42 : -18, sprint ? 42 : 18), vy: rand(sprint ? -32 : -16, 4),
+        r: .8 + Math.random() * (sprint ? 3.4 : 2), life: .35 + Math.random() * .4,
+        maxLife: .75, color: sprint ? 'rgba(139,132,91,.72)' : 'rgba(114,105,73,.55)'
       });
+    }
+    if (sprint) {
+      for (let i = 0; i < 4; i++) {
+        G.world.particles.push({
+          type: 'leaf', x: x + rand(-12, 12), y: y + rand(-2, 8),
+          vx: rand(-60, 60), vy: rand(-70, -12), rot: rand(0, TAU), spin: rand(-8, 8),
+          r: rand(1.4, 3), life: rand(.35, .75), maxLife: .8,
+          color: Math.random() < .5 ? '#9c9764' : '#607b52'
+        });
+      }
     }
   }
 
@@ -3086,27 +3706,25 @@ body.touch-mode .scene-title { top: 30%; }
     const p = G.player;
     if (!p || !p.lightOn) return false;
     const d = dist(p.x, p.y, x, y);
-    if (d > range) return false;
+    if (d > range * (1 + (G.mods.light || 0)) * (G.weather ? G.weather.visibility : 1)) return false;
     return Math.abs(angleDiff(Math.atan2(y - p.y, x - p.x), p.aim)) < tolerance;
   }
 
   function updateMilestones() {
     const p = progress();
-    if (!G.flags.ms1 && p > .16) {
+    const lv = levelData();
+    if (!G.flags.ms1 && p > .22) {
       G.flags.ms1 = true;
-      showToast('林子比想象中深', '回头看时，来路已经被黑暗合上了。', 'leaf', '', 4300);
+      showToast(`${lv.name} · 深入`, '回头看时，来路已经被黑暗合上了。', 'leaf', '', 3800);
     }
-    if (!G.flags.ms2 && p > .44) {
+    if (!G.flags.ms2 && p > .58) {
       G.flags.ms2 = true;
-      showToast('断崖', '路径被一道裂谷截断。南侧锚点亮着一盏旧灯。', 'compass', '', 4700);
-    }
-    if (!G.flags.ms3 && p > .68) {
-      G.flags.ms3 = true;
-      showToast('更近的狼嚎', '它们已经知道你在哪儿了。省点体力，别跑太急。', 'eye', 'is-danger', 4300);
+      const nearBridge = G.levelGoalY < RAVINE_Y && G.player.y > RAVINE_Y - 300;
+      showToast(nearBridge ? '断崖在前' : '它们闻到你了', nearBridge ? '南侧锚点亮着一盏旧灯。用绳索固定一条生路。' : '省点体力，别把最后一段路跑丢。', nearBridge ? 'rope' : 'eye', nearBridge ? '' : 'is-danger', 4300);
     }
     if (!G.flags.ms4 && p > .86) {
       G.flags.ms4 = true;
-      showToast('前方有光', '不是月光。林道就在前面。', 'torch', 'is-good', 4200);
+      showToast('本关林道在前', `穿过${lv.name}，下一件随身物品就在界碑后。`, 'torch', 'is-good', 4000);
     }
   }
 
@@ -3125,8 +3743,16 @@ body.touch-mode .scene-title { top: 30%; }
       a.growlCd = Math.max(0, a.growlCd - dt);
       a.alertT = Math.max(0, a.alertT - dt);
       const d = dist(a.x, a.y, p.x, p.y);
+      const pan = clamp((a.x - p.x) / 420, -1, 1);
+      const voiceVol = clamp(1 - d / 950, .08, 1);
+      a.stepCd = (a.stepCd || 0) - dt;
+      if (a.stepCd <= 0 && d < 620 && (a.state === 'chase' || a.state === 'charge' || a.state === 'wander')) {
+        a.stepCd = a.type === 'snake' ? rand(.75, 1.5) : a.type === 'boar' ? rand(.36, .56) : rand(.26, .42);
+        audio.animalStep(a.type, pan, voiceVol * (a.aggro ? 1 : .55));
+      }
       const lit = inFlashCone(a.x, a.y, .6, 760);
-      const sense = cfg.detect + (lit ? 185 : 0) + (noise ? 185 : 0);
+      const levelSense = 1 + (G.level - 1) * .012;
+      const sense = (cfg.detect * levelSense + (lit ? 185 : 0) + (noise ? 185 * (1 - G.mods.noise) : 0)) * (1 - G.mods.detect) * (G.weather ? G.weather.sense : 1);
       const homeDist = dist(a.x, a.y, a.homeX, a.homeY);
 
       if (!a.aggro) {
@@ -3137,9 +3763,9 @@ body.touch-mode .scene-title { top: 30%; }
           a.face = Math.atan2(p.y - a.y, p.x - a.x);
           markMet(a);
           if (a.type === 'wolf') alertNearbyWolves(a, 310);
-          if (d < 560 && a.growlCd <= 0) {
+          if (d < 620 && a.growlCd <= 0) {
             a.growlCd = rand(2.2, 4.5);
-            audio.growl(d < 280);
+            audio.animalAlert(a.type, pan, voiceVol);
           }
         } else {
           // quiet wandering
@@ -3168,9 +3794,9 @@ body.touch-mode .scene-title { top: 30%; }
           continue;
         }
         if (!a.met) markMet(a);
-        if (d < 600 && a.growlCd <= 0) {
+        if (d < 660 && a.growlCd <= 0) {
           a.growlCd = rand(3.5, 7);
-          audio.growl(d < 280);
+          audio.animalAlert(a.type, pan, voiceVol * .7);
         }
       }
 
@@ -3207,7 +3833,7 @@ body.touch-mode .scene-title { top: 30%; }
           a.chargeAngle = Math.atan2(p.y - a.y, p.x - a.x);
           a.hitDone = false;
           a.face = a.chargeAngle;
-          audio.growl(true);
+          audio.animalAlert(a.type, pan, Math.max(.6, voiceVol));
         }
         continue;
       }
@@ -3227,7 +3853,7 @@ body.touch-mode .scene-title { top: 30%; }
         }
         if (!a.hitDone && d < a.radius + p.radius + 12) {
           a.hitDone = true;
-          hurtPlayer(cfg.damage, cfg.bleed, a.type, a.chargeAngle);
+          hurtPlayer(a.damage || cfg.damage, cfg.bleed, a.type, a.chargeAngle);
         }
         if (a.stateT <= 0) {
           a.state = 'recover';
@@ -3245,7 +3871,7 @@ body.touch-mode .scene-title { top: 30%; }
         }
         if (a.stateT <= 0) {
           if (dist(a.x, a.y, p.x, p.y) < cfg.reach + p.radius + 10) {
-            hurtPlayer(cfg.damage, cfg.bleed, a.type, Math.atan2(p.y - a.y, p.x - a.x));
+            hurtPlayer(a.damage || cfg.damage, cfg.bleed, a.type, Math.atan2(p.y - a.y, p.x - a.x));
           }
           a.state = 'recover';
           a.stateT = a.type === 'boar' ? .7 : .4;
@@ -3271,7 +3897,7 @@ body.touch-mode .scene-title { top: 30%; }
           a.state = 'chargeWind';
           a.stateT = .52;
           a.face = Math.atan2(p.y - a.y, p.x - a.x);
-          audio.growl(d < 300);
+          audio.animalAlert(a.type, pan, voiceVol);
           for (let i = 0; i < 8; i++) {
             G.world.particles.push({
               type: 'dust', x: a.x + rand(-12, 12), y: a.y + 14,
@@ -3432,15 +4058,18 @@ body.touch-mode .scene-title { top: 30%; }
 
   function updateCamera(dt) {
     const p = G.player;
-    const look = 56;
-    const tx = clamp(p.x + Math.cos(p.aim) * look - viewW / 2, 0, Math.max(0, WORLD_W - viewW));
-    const ty = clamp(p.y + Math.sin(p.aim) * look - viewH / 2, 0, Math.max(0, WORLD_H - viewH));
-    G.camera.x = damp(G.camera.x, tx, 6.5, dt);
-    G.camera.y = damp(G.camera.y, ty, 6.5, dt);
+    const sp = p.sprintBlend || 0;
+    const look = 56 + sp * 44;
+    const moveLeadX = Math.cos(p.lastMoveAngle || p.aim) * sp * 16;
+    const moveLeadY = Math.sin(p.lastMoveAngle || p.aim) * sp * 16;
+    const tx = clamp(p.x + Math.cos(p.aim) * look + moveLeadX - viewW / 2, 0, Math.max(0, WORLD_W - viewW));
+    const ty = clamp(p.y + Math.sin(p.aim) * look + moveLeadY - viewH / 2, 0, Math.max(0, WORLD_H - viewH));
+    G.camera.x = damp(G.camera.x, tx, 6.5 + sp * 3.5, dt);
+    G.camera.y = damp(G.camera.y, ty, 6.5 + sp * 3.5, dt);
     G.camera.shake = Math.max(0, G.camera.shake - 28 * dt);
-    const s = G.camera.shake;
+    const s = G.camera.shake + sp * .55;
     G.camera.shakeX = (Math.random() * 2 - 1) * s;
-    G.camera.shakeY = (Math.random() * 2 - 1) * s;
+    G.camera.shakeY = (Math.random() * 2 - 1) * s + Math.sin(p.walk * 2) * .7 * (p.moveBlend || 0);
   }
 
   function snapCameraToPlayer() {
@@ -3470,10 +4099,29 @@ body.touch-mode .scene-title { top: 30%; }
     updateParticles(dt);
   }
 
+  function updateWeather(dt) {
+    if (!G.weather) return;
+    G.weatherTime += dt;
+    G.lightning = Math.max(0, G.lightning - dt * 2.1);
+    if (G.weather.storm > 0) {
+      G.weatherTimer -= dt;
+      if (G.weatherTimer <= 0) {
+        G.weatherTimer = rand(4.5, 10) / G.weather.storm;
+        G.lightning = 1;
+        audio.thunder(G.weather.storm);
+      }
+    }
+  }
+
   function updateGame(dt) {
     G.envTime += dt;
     G.runTime += dt;
+    updateWeather(dt);
     updatePlayer(dt);
+    for (let i = G.ghosts.length - 1; i >= 0; i--) {
+      G.ghosts[i].life -= dt;
+      if (G.ghosts[i].life <= 0) G.ghosts.splice(i, 1);
+    }
     if (G.state !== 'playing') {
       updateParticles(dt);
       return;
@@ -3501,6 +4149,7 @@ body.touch-mode .scene-title { top: 30%; }
 
   function updateEnd(dt) {
     G.envTime += dt;
+    updateWeather(dt);
     updateParticles(dt);
     G.camera.shake = Math.max(0, G.camera.shake - 20 * dt);
     G.camera.shakeX = (Math.random() * 2 - 1) * G.camera.shake;
@@ -3867,24 +4516,31 @@ body.touch-mode .scene-title { top: 30%; }
     const camY = G.camera.y + G.camera.shakeY;
     const view = { x: camX, y: camY, w: viewW, h: viewH };
     ctx.save();
+    const sprintZoom = 1 + (G.player ? (G.player.sprintBlend || 0) : 0) * .022;
+    if (sprintZoom > 1.0001) {
+      ctx.translate(viewW / 2, viewH / 2);
+      ctx.scale(sprintZoom, sprintZoom);
+      ctx.translate(-viewW / 2, -viewH / 2);
+    }
     ctx.translate(-camX, -camY);
     drawGround(view);
     drawTrail(view);
     drawDecals();
     if (!G.skipFoliage) drawGroundCover(view);
     drawRavine(view);
-    drawGoalRoad(view);
     drawCamp(view);
     drawSigns(view);
     drawRocksAndLogs(view);
     if (!G.skipTrees) drawTreeLayer(view);
     drawBridge(view);
+    drawLevelGoal(view);
     drawInteractables(view);
     drawEntities(view);
     drawWorldParticles();
     ctx.restore();
     if (!G.skipLighting) drawLighting(camX, camY);
     drawAfterDark(camX, camY);
+    drawGhostGlow(camX, camY);
     drawScreenAtmosphere(camX, camY);
     drawReticle(camX, camY);
   }
@@ -4047,12 +4703,13 @@ body.touch-mode .scene-title { top: 30%; }
   function flashlightFactorAt(x, y, tolerance = .75, range = 790) {
     const p = G.player;
     if (!p || !p.lightOn) return 0;
+    const reach = range * (1 + (G.mods.light || 0)) * (G.weather ? G.weather.visibility : 1);
     const d = dist(p.x, p.y, x, y);
-    if (d > range) return 0;
+    if (d > reach) return 0;
     const a = Math.abs(angleDiff(Math.atan2(y - p.y, x - p.x), p.aim));
     if (a > tolerance) return 0;
     const edge = 1 - smoothstep(tolerance * .62, tolerance, a) * .55;
-    return (1 - d / range) * edge;
+    return (1 - d / reach) * edge;
   }
 
   function drawTreeLayer(view) {
@@ -4543,6 +5200,80 @@ body.touch-mode .scene-title { top: 30%; }
     ctx.restore();
   }
 
+  function drawLevelGoal(view) {
+    const goal = G.world.goals;
+    const y = goal.y;
+    const x = goal.x;
+    if (x < view.x - 260 || x > view.x + view.w + 260 || y < view.y - 220 || y > view.y + view.h + 220) return;
+    const lv = levelData();
+    const ch = chapterData();
+    const pulse = .72 + Math.sin(G.envTime * 2.8) * .18;
+    ctx.save();
+    // a warm clearing at the level threshold
+    const glow = ctx.createRadialGradient(x, y, 4, x, y, 150);
+    glow.addColorStop(0, `rgba(234,178,102,${.18 * pulse})`);
+    glow.addColorStop(.45, `rgba(210,147,75,${.06 * pulse})`);
+    glow.addColorStop(1, 'rgba(210,147,75,0)');
+    ctx.fillStyle = glow;
+    ctx.fillRect(x - 160, y - 120, 320, 240);
+    // ground mark
+    ctx.strokeStyle = `rgba(224,169,95,${.22 * pulse})`;
+    ctx.lineWidth = 1.2;
+    ctx.beginPath();
+    ctx.ellipse(x, y + 8, 66, 19, 0, 0, TAU);
+    ctx.stroke();
+    // two modest posts frame the trail
+    ctx.fillStyle = '#332e20';
+    ctx.fillRect(x - 58, y - 82, 6, 90);
+    ctx.fillRect(x + 52, y - 82, 6, 90);
+    ctx.fillStyle = '#51452d';
+    ctx.fillRect(x - 68, y - 86, 136, 8);
+    ctx.fillRect(x - 63, y - 90, 16, 5);
+    ctx.fillRect(x + 47, y - 90, 16, 5);
+    // hanging lamps
+    for (const lx of [x - 55, x + 55]) {
+      ctx.strokeStyle = '#5b4d32';
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.moveTo(lx, y - 63);
+      ctx.lineTo(lx, y - 46);
+      ctx.stroke();
+      ctx.fillStyle = `rgba(255,196,110,${.82 * pulse})`;
+      ctx.beginPath();
+      ctx.arc(lx, y - 42, 4.2, 0, TAU);
+      ctx.fill();
+      ctx.fillStyle = `rgba(245,167,83,${.14 * pulse})`;
+      ctx.beginPath();
+      ctx.arc(lx, y - 42, 13, 0, TAU);
+      ctx.fill();
+    }
+    // sign
+    ctx.fillStyle = 'rgba(15,16,11,.94)';
+    ctx.fillRect(x - 82, y - 132, 164, 45);
+    ctx.strokeStyle = `rgba(212,172,104,${.52 * pulse})`;
+    ctx.lineWidth = 1.2;
+    ctx.strokeRect(x - 82, y - 132, 164, 45);
+    ctx.fillStyle = 'rgba(37,31,19,.96)';
+    ctx.fillRect(x - 74, y - 125, 148, 31);
+    ctx.textAlign = 'center';
+    ctx.fillStyle = 'rgba(241,218,171,.96)';
+    ctx.font = '600 16px "Microsoft YaHei", "PingFang SC", sans-serif';
+    ctx.fillText(ch.goal, x, y - 105);
+    ctx.fillStyle = 'rgba(218,191,139,.66)';
+    ctx.font = '8px "Segoe UI", sans-serif';
+    ctx.fillText(`LEVEL ${String(lv.num).padStart(2, '0')} / 30 · ${ch.tag}`, x, y - 91);
+    // ropes holding the sign to the crossbeam
+    ctx.strokeStyle = 'rgba(160,139,93,.55)';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(x - 48, y - 132);
+    ctx.lineTo(x - 48, y - 92);
+    ctx.moveTo(x + 48, y - 132);
+    ctx.lineTo(x + 48, y - 92);
+    ctx.stroke();
+    ctx.restore();
+  }
+
   function drawCamp(view) {
     const f = G.world.campfire;
     const t = G.world.tent;
@@ -4620,7 +5351,7 @@ body.touch-mode .scene-title { top: 30%; }
   }
 
   function drawSigns(view) {
-    drawSign(G.world.startSign, '北 · 林道', 'NORTH ROAD  1.2 km', false, view);
+    drawSign(G.world.startSign, '北 · 林道', `LEVEL ${String(levelData().num).padStart(2, '0')} / 30 · NORTH ROAD`, false, view);
     drawSign(G.world.bridgeSign, '断 崖', 'ROPE ANCHOR  →', true, view);
   }
 
@@ -4706,6 +5437,11 @@ body.touch-mode .scene-title { top: 30%; }
   }
 
   function drawEntities(view) {
+    drawSprintAura();
+    for (const ghost of G.ghosts) {
+      if (ghost.x < view.x - 80 || ghost.x > view.x + view.w + 80 || ghost.y < view.y - 80 || ghost.y > view.y + view.h + 80) continue;
+      drawGhost(ghost);
+    }
     const list = [];
     for (const a of G.world.animals) {
       if (a.dead && a.deadT > 24) continue;
@@ -4718,6 +5454,105 @@ body.touch-mode .scene-title { top: 30%; }
       if (item.kind === 'player') drawPlayer();
       else drawAnimal(item.a);
     }
+  }
+
+  function drawGhostGlow(camX, camY) {
+    if (!G.ghosts.length) return;
+    const p = G.player;
+    if (!p) return;
+    const sp = p.sprintBlend || 0;
+    if (sp < .12) return;
+    ctx.save();
+    ctx.globalCompositeOperation = 'screen';
+    for (let i = 0; i < G.ghosts.length; i++) {
+      const g = G.ghosts[i];
+      const a = clamp(g.life / g.maxLife, 0, 1) * .28 * sp;
+      if (a <= .01) continue;
+      const x = g.x - camX;
+      const y = g.y - camY;
+      if (x < -40 || x > viewW + 40 || y < -40 || y > viewH + 40) continue;
+      ctx.fillStyle = `rgba(170, 214, 158, ${a})`;
+      ctx.beginPath();
+      ctx.ellipse(x, y - 2, 10, 8, 0, 0, TAU);
+      ctx.fill();
+      ctx.fillStyle = `rgba(226, 214, 166, ${a * .9})`;
+      ctx.beginPath();
+      ctx.arc(x + Math.cos(g.face) * 8, y + Math.sin(g.face) * 8, 3.2, 0, TAU);
+      ctx.fill();
+    }
+    // a thin wake connecting the afterimages
+    if (G.ghosts.length > 1) {
+      const first = G.ghosts[0];
+      const last = G.ghosts[G.ghosts.length - 1];
+      const grad = ctx.createLinearGradient(first.x - camX, first.y - camY, last.x - camX, last.y - camY);
+      grad.addColorStop(0, 'rgba(160,205,150,0)');
+      grad.addColorStop(1, `rgba(194,223,177,${.1 * sp})`);
+      ctx.strokeStyle = grad;
+      ctx.lineWidth = 5;
+      ctx.beginPath();
+      ctx.moveTo(first.x - camX, first.y - camY - 3);
+      ctx.lineTo(last.x - camX, last.y - camY - 3);
+      ctx.stroke();
+    }
+    ctx.restore();
+  }
+
+  function drawSprintAura() {
+    const p = G.player;
+    if (!p || p.dead) return;
+    const sp = p.sprintBlend || 0;
+    if (sp < .06) return;
+    const a = p.lastMoveAngle || p.face;
+    ctx.save();
+    ctx.globalCompositeOperation = 'screen';
+    ctx.translate(p.x, p.y);
+    ctx.rotate(a);
+    for (let i = 0; i < 7; i++) {
+      const back = 14 + i * 9;
+      const alpha = (1 - i / 7) * .12 * sp;
+      ctx.fillStyle = `rgba(178, 204, 165, ${alpha})`;
+      ctx.beginPath();
+      ctx.ellipse(-back, Math.sin(i * 1.9 + G.envTime * 8) * 3, 18 + i * 2, 7 - i * .55, 0, 0, TAU);
+      ctx.fill();
+    }
+    for (let i = 0; i < 9; i++) {
+      const off = (i - 4) * 3.4;
+      const len = 38 + (i % 3) * 22;
+      ctx.strokeStyle = `rgba(196, 218, 178, ${(.04 + (i % 3) * .025) * sp})`;
+      ctx.lineWidth = .8;
+      ctx.beginPath();
+      ctx.moveTo(-18, off);
+      ctx.lineTo(-18 - len, off + (i % 2 ? 1 : -1));
+      ctx.stroke();
+    }
+    ctx.restore();
+  }
+
+  function drawGhost(g) {
+    const a = clamp(g.life / g.maxLife, 0, 1);
+    if (a <= 0) return;
+    ctx.save();
+    ctx.globalAlpha = a * .34;
+    ctx.translate(g.x, g.y);
+    ctx.rotate(g.face);
+    ctx.scale(1.45, 1.45);
+    ctx.fillStyle = 'rgba(158, 193, 146, .8)';
+    ctx.beginPath();
+    ctx.ellipse(0, 0, 11, 9, 0, 0, TAU);
+    ctx.fill();
+    ctx.fillStyle = 'rgba(212, 191, 143, .8)';
+    ctx.beginPath();
+    ctx.arc(10.4, -2, 4.2, 0, TAU);
+    ctx.fill();
+    ctx.strokeStyle = 'rgba(178, 201, 159, .7)';
+    ctx.lineWidth = 3.5;
+    ctx.beginPath();
+    ctx.moveTo(-5, 4);
+    ctx.lineTo(-8 + Math.sin(g.walk) * 7, 12);
+    ctx.moveTo(5, 4);
+    ctx.lineTo(7 - Math.sin(g.walk) * 7, 12);
+    ctx.stroke();
+    ctx.restore();
   }
 
   function drawAnimal(a) {
@@ -4953,104 +5788,141 @@ body.touch-mode .scene-title { top: 30%; }
   function drawPlayer() {
     const p = G.player;
     if (!p) return;
-    const bob = Math.sin(p.walk) * 1.4;
-    const stride = Math.sin(p.walk) * 3.2;
+    const sp = p.sprintBlend || 0;
+    const move = p.moveBlend || 0;
+    const gait = p.walk;
+    const bob = Math.abs(Math.sin(gait)) * (1.2 + sp * 1.2) * move;
     ctx.save();
     ctx.globalAlpha = p.dead ? .8 : 1;
-    // shadow
+    // shadow stays on the ground while the body bobs
     ctx.fillStyle = 'rgba(1,4,3,.5)';
     ctx.beginPath();
-    ctx.ellipse(p.x + 2, p.y + 9, 18, 7, 0, 0, TAU);
+    ctx.ellipse(p.x + 2, p.y + 10, 20 + sp * 5, 8 + sp * 1.8, 0, 0, TAU);
     ctx.fill();
-    ctx.translate(p.x, p.y + bob);
-    if (p.dead) ctx.rotate(p.face + Math.PI / 2);
-    else ctx.rotate(p.face);
-    ctx.scale(1.55, 1.55);
-    // legs
-    ctx.strokeStyle = '#242a20';
-    ctx.lineWidth = 5;
-    ctx.lineCap = 'round';
-    if (!p.dead) {
+
+    if (p.dead) {
+      ctx.translate(p.x, p.y);
+      ctx.rotate(p.face + Math.PI / 2);
+      ctx.scale(1.55, 1.55);
+      ctx.strokeStyle = '#242a20';
+      ctx.lineWidth = 5;
+      ctx.lineCap = 'round';
       ctx.beginPath();
-      ctx.moveTo(-5, 4);
-      ctx.lineTo(-7 + stride, 12);
-      ctx.moveTo(5, 4);
-      ctx.lineTo(5 - stride, 12);
+      ctx.moveTo(-5, 4); ctx.lineTo(-13, 9);
+      ctx.moveTo(5, 4); ctx.lineTo(13, 10);
       ctx.stroke();
-    } else {
-      ctx.beginPath();
-      ctx.moveTo(-5, 4);
-      ctx.lineTo(-13, 9);
-      ctx.moveTo(5, 4);
-      ctx.lineTo(13, 10);
-      ctx.stroke();
+      ctx.fillStyle = '#3a3526';
+      ctx.beginPath(); ctx.roundRect(-12, -6, 13, 12, 4); ctx.fill();
+      ctx.fillStyle = '#3c4a3a';
+      ctx.beginPath(); ctx.ellipse(0, 0, 11, 9, 0, 0, TAU); ctx.fill();
+      ctx.fillStyle = '#303b2d';
+      ctx.beginPath(); ctx.arc(8.9, -3, 6.1, 0, TAU); ctx.fill();
+      ctx.restore();
+      return;
     }
-    // backpack
+
+    ctx.translate(p.x, p.y + bob);
+    ctx.rotate(p.face + (p.bank || 0));
+    const lean = sp * 2.4 + move * .8;
+    ctx.translate(lean, 0);
+    ctx.scale(1.8 * (1 - sp * .02), 1.8 * (1 + sp * .04));
+
+    const drawLeg = (side, phase) => {
+      const swing = Math.sin(phase) * (5.2 + sp * 3.8) * (0.35 + move * .65);
+      const lift = Math.max(0, Math.cos(phase)) * (1.3 + sp * 2.2) * move;
+      const hx = -3.2, hy = side * 4.7;
+      const kx = -6.3 + swing * .42, ky = side * 5.9;
+      const fx = -11.2 + swing, fy = side * 6.8 + lift;
+      ctx.strokeStyle = side < 0 ? '#333d2d' : '#4b5741';
+      ctx.lineWidth = 4.7;
+      ctx.lineCap = 'round';
+      ctx.beginPath(); ctx.moveTo(hx, hy); ctx.lineTo(kx, ky); ctx.stroke();
+      ctx.strokeStyle = side < 0 ? '#3c4834' : '#59664c';
+      ctx.lineWidth = 3.4;
+      ctx.beginPath(); ctx.moveTo(kx, ky); ctx.lineTo(fx, fy); ctx.stroke();
+      ctx.fillStyle = '#20251a';
+      ctx.beginPath(); ctx.ellipse(fx, fy + 1, 3.2, 2.1, 0, 0, TAU); ctx.fill();
+      ctx.strokeStyle = 'rgba(214,204,162,.22)';
+      ctx.lineWidth = .7;
+      ctx.stroke();
+      return { x: fx, y: fy };
+    };
+    const drawArm = (side, phase) => {
+      const swing = Math.sin(phase) * (3.8 + sp * 3.4) * move;
+      const sx = 2.5, sy = side * 6.4;
+      const ex = 7.2 + swing * .55, ey = side * 8.5;
+      const hx = 10.6 + swing, hy = side * 9.6;
+      ctx.strokeStyle = '#3b4637';
+      ctx.lineWidth = 3.1;
+      ctx.lineCap = 'round';
+      ctx.beginPath(); ctx.moveTo(sx, sy); ctx.lineTo(ex, ey); ctx.lineTo(hx, hy); ctx.stroke();
+      ctx.fillStyle = '#b0845d';
+      ctx.beginPath(); ctx.arc(hx, hy, 1.8, 0, TAU); ctx.fill();
+      return { x: hx, y: hy };
+    };
+
+    // back limbs first; the near-side limbs are drawn after the coat
+    drawLeg(-1, gait + Math.PI);
+    drawLeg(1, gait);
+    const backArm = drawArm(-1, gait);
+
+    // backpack sits behind the shoulders and bounces with the stride
+    const packBounce = Math.sin(gait * 2) * .55 * move;
     ctx.fillStyle = '#3a3526';
-    ctx.beginPath();
-    ctx.roundRect(-12, -6, 13, 12, 4);
-    ctx.fill();
+    ctx.beginPath(); ctx.roundRect(-14 + packBounce, -6, 13, 12, 4); ctx.fill();
     ctx.fillStyle = 'rgba(150,132,87,.2)';
-    ctx.fillRect(-10, -4, 8, 2);
-    // body coat
+    ctx.fillRect(-12 + packBounce, -4, 8, 2);
+    ctx.strokeStyle = 'rgba(190,176,130,.18)';
+    ctx.lineWidth = .8;
+    ctx.beginPath(); ctx.moveTo(-12 + packBounce, 3); ctx.lineTo(-2 + packBounce, 3); ctx.stroke();
+
+    // torso — a small twist and side sway sell the weight shift
+    ctx.save();
+    ctx.rotate(Math.sin(gait) * .028 * move);
     const coat = ctx.createLinearGradient(-8, -8, 8, 8);
     coat.addColorStop(0, p.hurtT > 0 ? '#8c5a48' : '#56644d');
     coat.addColorStop(.55, p.hurtT > 0 ? '#6e3f35' : '#3c4a3a');
     coat.addColorStop(1, '#263127');
     ctx.fillStyle = coat;
-    ctx.beginPath();
-    ctx.ellipse(0, 0, 11, 9, 0, 0, TAU);
-    ctx.fill();
-    ctx.strokeStyle = 'rgba(222,224,192,.24)';
-    ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.ellipse(0, 0, 11, 9, 0, 0, TAU); ctx.fill();
+    ctx.strokeStyle = 'rgba(236,226,190,.34)';
+    ctx.lineWidth = .9;
     ctx.stroke();
-    // scarf
-    ctx.fillStyle = '#8e5d45';
-    ctx.beginPath();
-    ctx.ellipse(7, -1, 4.5, 3.5, 0, 0, TAU);
-    ctx.fill();
+    // shoulder seam
+    ctx.strokeStyle = 'rgba(18,24,18,.35)';
+    ctx.beginPath(); ctx.moveTo(4, -6); ctx.lineTo(5, 6); ctx.stroke();
+    ctx.restore();
+
+    // scarf trails against the direction of travel
     ctx.strokeStyle = '#7c4f39';
-    ctx.lineWidth = 3;
+    ctx.lineWidth = 2.8;
+    ctx.lineCap = 'round';
     ctx.beginPath();
-    ctx.moveTo(5, 2);
-    ctx.quadraticCurveTo(-3, 7, -10 - Math.sin(p.walk) * 2, 5);
+    ctx.moveTo(4, 2);
+    const scarf = 9 + sp * 10 + move * 3;
+    ctx.bezierCurveTo(-2, 6 + Math.sin(gait) * 2, -scarf * .55, 5 + Math.sin(gait + 1) * 2.5, -scarf, 4 + Math.sin(gait + 2) * 3);
     ctx.stroke();
-    // head / hood
+    ctx.fillStyle = '#8e5d45';
+    ctx.beginPath(); ctx.ellipse(6, -1, 4.5, 3.5, 0, 0, TAU); ctx.fill();
+
+    // front arm and head
+    const frontArm = drawArm(1, gait + Math.PI);
     ctx.fillStyle = '#b98d66';
-    ctx.beginPath();
-    ctx.arc(10.4, -2, 4.15, 0, TAU);
-    ctx.fill();
+    ctx.beginPath(); ctx.arc(10.4, -2, 4.15, 0, TAU); ctx.fill();
     ctx.fillStyle = '#303b2d';
-    ctx.beginPath();
-    ctx.arc(8.9, -3, 6.1, 0, TAU);
-    ctx.fill();
+    ctx.beginPath(); ctx.arc(8.9, -3, 6.1, 0, TAU); ctx.fill();
     ctx.fillStyle = '#b98d66';
-    ctx.beginPath();
-    ctx.arc(11, -1.7, 3.6, -.92, .92);
-    ctx.fill();
+    ctx.beginPath(); ctx.arc(11, -1.7, 3.6, -.92, .92); ctx.fill();
     ctx.strokeStyle = 'rgba(172,193,145,.4)';
     ctx.lineWidth = 1;
-    ctx.beginPath();
-    ctx.arc(8.9, -3, 5.5, Math.PI * 1.08, Math.PI * 1.78);
-    ctx.stroke();
-    // a hint of the face
+    ctx.beginPath(); ctx.arc(8.9, -3, 5.5, Math.PI * 1.08, Math.PI * 1.78); ctx.stroke();
     ctx.fillStyle = 'rgba(25,27,20,.75)';
-    ctx.beginPath();
-    ctx.arc(12.6, -1.4, .8, 0, TAU);
-    ctx.fill();
-    // arms
-    ctx.strokeStyle = '#495641';
-    ctx.lineWidth = 3.5;
-    const armSwing = p.attackT > 0 ? 0 : Math.sin(p.walk) * 2.4;
-    ctx.beginPath();
-    ctx.moveTo(2, -5);
-    ctx.lineTo(13, -7 + armSwing);
-    ctx.moveTo(2, 5);
-    ctx.lineTo(12, 7 - armSwing);
-    ctx.stroke();
-    // flashlight
+    ctx.beginPath(); ctx.arc(12.6, -1.4, .8, 0, TAU); ctx.fill();
+
+    // flashlight is held in the front hand and still aims independently of the body
+    const handSwing = Math.sin(gait + Math.PI) * (2.4 + sp * 2.2) * move;
     ctx.save();
-    ctx.translate(15, 8 - armSwing);
+    ctx.translate(15, 8 - handSwing);
     ctx.rotate(p.aim - p.face);
     ctx.fillStyle = '#20231d';
     ctx.fillRect(-2, -2.4, 9, 4.8);
@@ -5062,29 +5934,19 @@ body.touch-mode .scene-title { top: 30%; }
       const t = 1 - p.attackT / .23;
       const a = (t - .5) * 1.5;
       ctx.save();
-      ctx.rotate(a);
+      ctx.rotate(p.aim - p.face + a);
       ctx.strokeStyle = '#d8d2bc';
       ctx.lineWidth = 2;
-      ctx.beginPath();
-      ctx.moveTo(13, -5);
-      ctx.lineTo(28, -8);
-      ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(13, -5); ctx.lineTo(28, -8); ctx.stroke();
       ctx.strokeStyle = '#4d3e2a';
       ctx.lineWidth = 3.5;
-      ctx.beginPath();
-      ctx.moveTo(10, -4);
-      ctx.lineTo(14, -5);
-      ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(10, -4); ctx.lineTo(14, -5); ctx.stroke();
       ctx.restore();
     } else {
       ctx.fillStyle = '#a9a48f';
       ctx.beginPath();
-      ctx.moveTo(12, -8);
-      ctx.lineTo(18, -10);
-      ctx.lineTo(19, -8);
-      ctx.lineTo(13, -6.5);
-      ctx.closePath();
-      ctx.fill();
+      ctx.moveTo(12, -8); ctx.lineTo(18, -10); ctx.lineTo(19, -8); ctx.lineTo(13, -6.5);
+      ctx.closePath(); ctx.fill();
     }
     ctx.restore();
   }
@@ -5095,9 +5957,19 @@ body.touch-mode .scene-title { top: 30%; }
       const alpha = clamp(p.life / p.maxLife, 0, 1);
       ctx.globalAlpha = alpha * (p.type === 'blood' ? .85 : .55);
       ctx.fillStyle = p.color;
-      ctx.beginPath();
-      ctx.arc(p.x, p.y, p.r, 0, TAU);
-      ctx.fill();
+      if (p.type === 'leaf') {
+        ctx.save();
+        ctx.translate(p.x, p.y);
+        ctx.rotate((p.rot || 0) + G.envTime * (p.spin || 0));
+        ctx.beginPath();
+        ctx.ellipse(0, 0, p.r * 1.7, p.r * .7, 0, 0, TAU);
+        ctx.fill();
+        ctx.restore();
+      } else {
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.r, 0, TAU);
+        ctx.fill();
+      }
     }
     ctx.globalAlpha = 1;
   }
@@ -5130,7 +6002,8 @@ body.touch-mode .scene-title { top: 30%; }
     const px = p.x - camX;
     const py = p.y - camY;
     const menu = G.state === 'menu';
-    const dark = menu ? .3 : (p.lightOn ? .61 : .75);
+    const chapterDark = menu ? 0 : (chapterData().darkness || 0);
+    const dark = menu ? .3 : Math.min(.9, (p.lightOn ? .61 : .75) + chapterDark);
     lctx.setTransform(DPR, 0, 0, DPR, 0, 0);
     lctx.globalCompositeOperation = 'source-over';
     lctx.clearRect(0, 0, viewW, viewH);
@@ -5158,7 +6031,7 @@ body.touch-mode .scene-title { top: 30%; }
         );
       }
       const flicker = p.lightFlicker > 0 ? 0.78 + Math.sin(G.envTime * 55) * .1 : 1;
-      const range = menu ? 700 : 780;
+      const range = (menu ? 700 : 780) * (1 + (G.mods.light || 0)) * (G.weather ? G.weather.visibility : 1);
       const layers = [
         { half: .5, alpha: .055 * flicker },
         { half: .41, alpha: .075 * flicker },
@@ -5188,8 +6061,8 @@ body.touch-mode .scene-title { top: 30%; }
       sources.push({ x: world.bridge.x - world.bridge.half, y: RAVINE_Y, r: 120, a: .38 });
       sources.push({ x: world.bridge.x + world.bridge.half, y: RAVINE_Y, r: 120, a: .38 });
     }
-    sources.push({ x: world.goals.gateX - 108, y: 295, r: 170, a: .48 });
-    sources.push({ x: world.goals.gateX + 108, y: 295, r: 170, a: .48 });
+    sources.push({ x: world.goals.x - 55, y: world.goals.y - 42, r: 150, a: .58, flicker: true });
+    sources.push({ x: world.goals.x + 55, y: world.goals.y - 42, r: 150, a: .58, flicker: true });
     for (const s of sources) {
       const sx = s.x - camX;
       const sy = s.y - camY;
@@ -5315,9 +6188,9 @@ body.touch-mode .scene-title { top: 30%; }
     if (!world.bridge.secured) {
       lights.push({ x: world.bridge.anchorX, y: world.bridge.anchorY - 62, size: 225, alpha: .62 });
     }
-    const gate = world.goals.gateX;
-    lights.push({ x: gate - 108, y: 295, size: 165, alpha: .3 });
-    lights.push({ x: gate + 108, y: 295, size: 165, alpha: .3 });
+    const gate = world.goals.x;
+    lights.push({ x: gate - 55, y: world.goals.y - 42, size: 165, alpha: .38 });
+    lights.push({ x: gate + 55, y: world.goals.y - 42, size: 165, alpha: .38 });
     for (const l of lights) {
       const sx = l.x - camX;
       const sy = l.y - camY;
@@ -5508,6 +6381,7 @@ body.touch-mode .scene-title { top: 30%; }
   }
 
   function drawScreenAtmosphere(camX, camY) {
+    const p = G.player;
     // moon haze
     ctx.save();
     ctx.globalCompositeOperation = 'screen';
@@ -5536,6 +6410,145 @@ body.touch-mode .scene-title { top: 30%; }
     // slight blue-green color veil
     ctx.fillStyle = 'rgba(8,19,17,.04)';
     ctx.fillRect(0, 0, viewW, viewH);
+
+    // Chapter mood. Each region has its own air, from marsh green to ash orange.
+    const chapter = chapterData();
+    if (chapter.tint) {
+      ctx.fillStyle = chapter.tint;
+      ctx.fillRect(0, 0, viewW, viewH);
+    }
+    drawWeatherFX();
+    if (chapter.name === '灰烬林' && p) {
+      ctx.save();
+      ctx.globalCompositeOperation = 'screen';
+      for (let i = 0; i < 14; i++) {
+        const ex = (i * 173 + G.envTime * (18 + i * 2)) % (viewW + 80) - 40;
+        const ey = (i * 97 - G.envTime * (24 + i)) % (viewH + 80);
+        const y = ey < 0 ? ey + viewH + 80 : ey;
+        ctx.fillStyle = `rgba(232,120,52,${.12 + (i % 3) * .04})`;
+        ctx.beginPath();
+        ctx.arc(ex, y, 1 + (i % 3), 0, TAU);
+        ctx.fill();
+      }
+      ctx.restore();
+    }
+
+    drawSprintFX();
+  }
+
+  function drawWeatherFX() {
+    const w = G.weather;
+    if (!w) return;
+    const time = G.weatherTime;
+    const intensity = w.intensity || 1;
+    ctx.save();
+    if (w.rain > 0) {
+      const count = Math.floor(90 * w.rain * intensity);
+      for (let i = 0; i < count; i++) {
+        const speed = 620 + (i % 7) * 58;
+        const x = ((i * 137 + time * speed * .22) % (viewW + 140)) - 70;
+        const y = ((i * 83 + time * speed) % (viewH + 120)) - 60;
+        ctx.strokeStyle = `rgba(174,204,214,${.14 + (i % 5) * .045})`;
+        ctx.lineWidth = .9 + (i % 3) * .5;
+        ctx.beginPath();
+        ctx.moveTo(x, y);
+        ctx.lineTo(x - 8 - w.wind * 14, y + 24 + w.rain * 16);
+        ctx.stroke();
+      }
+      const wet = ctx.createLinearGradient(0, 0, viewW, viewH);
+      wet.addColorStop(0, `rgba(30,62,78,${.05 * w.rain})`);
+      wet.addColorStop(1, `rgba(18,42,51,${.08 * w.rain})`);
+      ctx.fillStyle = wet;
+      ctx.fillRect(0, 0, viewW, viewH);
+    }
+    if (w.snow > 0) {
+      const count = Math.floor(100 * w.snow * intensity);
+      for (let i = 0; i < count; i++) {
+        const drift = Math.sin(time * .8 + i * 1.7) * (8 + i % 5);
+        const x = ((i * 97 + time * (12 + i % 4) + drift) % (viewW + 60)) - 30;
+        const y = ((i * 61 + time * (22 + i % 5)) % (viewH + 60)) - 30;
+        ctx.fillStyle = `rgba(225,239,242,${.28 + (i % 4) * .08})`;
+        ctx.beginPath();
+        ctx.arc(x, y, 1.1 + (i % 4) * .75, 0, TAU);
+        ctx.fill();
+      }
+      ctx.fillStyle = `rgba(170,198,210,${.025 * w.snow})`;
+      ctx.fillRect(0, 0, viewW, viewH);
+    }
+    if (w.fog > 0) {
+      const g = ctx.createLinearGradient(0, viewH * .25, 0, viewH);
+      g.addColorStop(0, 'rgba(150,170,158,0)');
+      g.addColorStop(.55, `rgba(150,170,158,${.035 * w.fog})`);
+      g.addColorStop(1, `rgba(174,190,176,${.11 * w.fog})`);
+      ctx.fillStyle = g;
+      ctx.fillRect(0, 0, viewW, viewH);
+    }
+    if (w.ash > 0) {
+      const count = Math.floor(34 * w.ash * intensity);
+      for (let i = 0; i < count; i++) {
+        const x = ((i * 173 + time * (18 + i % 6)) % (viewW + 80)) - 40;
+        const y = ((i * 91 - time * (28 + i % 5)) % (viewH + 80));
+        ctx.fillStyle = `rgba(${190 + i % 30},${108 + i % 25},${62 + i % 20},${.12 + (i % 4) * .035})`;
+        ctx.beginPath();
+        ctx.arc(x, y < 0 ? y + viewH + 80 : y, 1 + (i % 3) * .65, 0, TAU);
+        ctx.fill();
+      }
+    }
+    if (w.wind > 0 && !w.rain && !w.snow) {
+      for (let i = 0; i < 16; i++) {
+        const x = ((i * 157 + time * (110 + w.wind * 80)) % (viewW + 120)) - 40;
+        const y = ((i * 73 + time * 8) % (viewH + 60)) - 20;
+        ctx.strokeStyle = `rgba(178,197,169,${.025 + w.wind * .035})`;
+        ctx.lineWidth = .7;
+        ctx.beginPath();
+        ctx.moveTo(x, y);
+        ctx.lineTo(x - 16 - w.wind * 18, y + 3);
+        ctx.stroke();
+      }
+    }
+    if (G.lightning > 0) {
+      ctx.fillStyle = `rgba(196,220,232,${.24 * G.lightning})`;
+      ctx.fillRect(0, 0, viewW, viewH);
+    }
+    ctx.restore();
+  }
+
+  function drawSprintFX() {
+    const p = G.player;
+    if (!p || p.dead) return;
+    const s = p.sprintBlend || 0;
+    if (s < .02) return;
+    const cx = viewW * .5;
+    const cy = viewH * .54;
+    ctx.save();
+    ctx.globalCompositeOperation = 'screen';
+    // radial velocity streaks, strongest near the edges
+    const t = G.envTime * 12;
+    for (let i = 0; i < 24; i++) {
+      const a = (i / 24) * TAU + Math.sin(t * .13 + i) * .08;
+      const wobble = Math.sin(t * .6 + i * 2.7) * .5 + .5;
+      const inner = Math.max(viewW, viewH) * (.18 + wobble * .14);
+      const outer = Math.max(viewW, viewH) * (.68 + wobble * .22);
+      const alpha = (.10 + wobble * .14) * s;
+      ctx.strokeStyle = `rgba(204,222,194,${alpha})`;
+      ctx.lineWidth = 1 + wobble * 1.3;
+      ctx.beginPath();
+      ctx.moveTo(cx + Math.cos(a) * inner, cy + Math.sin(a) * inner);
+      ctx.lineTo(cx + Math.cos(a) * outer, cy + Math.sin(a) * outer);
+      ctx.stroke();
+    }
+    // warm side pressure at full sprint
+    const side = ctx.createLinearGradient(0, 0, viewW, 0);
+    side.addColorStop(0, `rgba(229,158,87,${.2 * s})`);
+    side.addColorStop(.16, 'rgba(229,158,87,0)');
+    side.addColorStop(.84, 'rgba(116,171,153,0)');
+    side.addColorStop(1, `rgba(116,171,153,${.17 * s})`);
+    ctx.fillStyle = side;
+    ctx.fillRect(0, 0, viewW, viewH);
+    // ground-level speed haze
+    ctx.fillStyle = `rgba(180,205,172,${.035 * s})`;
+    ctx.fillRect(0, viewH * .55, viewW, viewH * .45);
+    ctx.restore();
   }
 
   function drawForegroundFronds() {
@@ -5614,6 +6627,13 @@ body.touch-mode .scene-title { top: 30%; }
   function updateHUD(force = false) {
     const p = G.player;
     if (!p) return;
+    const lv = levelData();
+    if (force || hudCache.level !== lv.num) {
+      hudCache.level = lv.num;
+      if (ui.levelNum) ui.levelNum.textContent = String(lv.num);
+      if (ui.levelName) ui.levelName.textContent = `${lv.name} · ${G.weather.name}`;
+      if (ui.objectiveText) ui.objectiveText.textContent = `穿过${lv.chapter.name} · 抵达${lv.chapter.goal}，领取${lv.reward.name}`;
+    }
     const d = Math.round(currentDistance());
     if (force || hudCache.distance !== d) {
       hudCache.distance = d;
@@ -5629,6 +6649,10 @@ body.touch-mode .scene-title { top: 30%; }
     if (force || hudCache.hp !== hp) {
       hudCache.hp = hp;
       ui.hpValue.textContent = String(hp);
+    }
+    if (force || hudCache.maxHp !== p.maxHp) {
+      hudCache.maxHp = p.maxHp;
+      if (ui.hpMax) ui.hpMax.textContent = String(Math.round(p.maxHp));
     }
     ui.hpFill.style.width = clamp(p.hp / p.maxHp * 100, 0, 100).toFixed(1) + '%';
     ui.hpFill.classList.toggle('is-low', p.hp <= 32);
@@ -5675,7 +6699,8 @@ body.touch-mode .scene-title { top: 30%; }
       }
     }
 
-    const compass = Math.atan2(GOAL.x - p.x, p.y - GOAL.y);
+    const goal = G.world.goals;
+    const compass = Math.atan2(goal.x - p.x, p.y - goal.y);
     ui.compassArrow.style.transform = `rotate(${compass}rad)`;
   }
 
@@ -5749,8 +6774,8 @@ body.touch-mode .scene-title { top: 30%; }
 
   function bindEvents() {
     ui.startBtn.addEventListener('click', startRun);
-    ui.retryBtn.addEventListener('click', startRun);
-    ui.againBtn.addEventListener('click', startRun);
+    ui.retryBtn.addEventListener('click', retryLevel);
+    ui.againBtn.addEventListener('click', advanceLevel);
     ui.howBtn.addEventListener('click', openHow);
     ui.howClose.addEventListener('click', closeHow);
     ui.howStart.addEventListener('click', () => {
@@ -5759,7 +6784,7 @@ body.touch-mode .scene-title { top: 30%; }
     });
     ui.pauseBtn.addEventListener('click', pauseGame);
     ui.resumeBtn.addEventListener('click', resumeGame);
-    ui.pauseRestartBtn.addEventListener('click', startRun);
+    ui.pauseRestartBtn.addEventListener('click', retryLevel);
     ui.pauseMenuBtn.addEventListener('click', goToMenu);
     ui.deathMenuBtn.addEventListener('click', goToMenu);
     ui.victoryMenuBtn.addEventListener('click', goToMenu);
@@ -5798,7 +6823,10 @@ body.touch-mode .scene-title { top: 30%; }
         return;
       }
       if (G.state === 'dead' || G.state === 'won') {
-        if ((e.code === 'Enter' || e.code === 'NumpadEnter') && !onButton) startRun();
+        if ((e.code === 'Enter' || e.code === 'NumpadEnter') && !onButton) {
+          if (G.state === 'dead') retryLevel();
+          else advanceLevel();
+        }
         return;
       }
       if (G.state !== 'playing') return;
@@ -5934,12 +6962,20 @@ body.touch-mode .scene-title { top: 30%; }
       snapCameraToPlayer();
     },
     light(on) { if (G.player) G.player.lightOn = !!on; },
-    win() { winGame(); }
+    win() { winGame(); },
+    sound(type = 'wolf') { audio.animalAlert(type, .15, 1); audio.animalStep(type, -.15, 1); },
+    jump(level) {
+      const n = clamp(Number(level) || 1, 1, LEVEL_COUNT);
+      G.items = LEVEL_ITEMS.slice(0, n - 1);
+      G.totalTime = 0;
+      G.totalKills = 0;
+      startLevel(n, false);
+    }
   };
 
   init();
 })();
 
-  </script>
+</script>
 </body>
 </html>
