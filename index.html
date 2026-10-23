@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#050b0a">
+  <title>黑林夜行 · NIGHTWOOD</title>
+  <meta name="description" content="一款发生在深夜密林中的单人生存穿越小游戏。靠一束手电、一把刀、一卷绳和有限的急救药物，活着走到林道。">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%2308110d'/%3E%3Cpath d='M32 11c8 10 14 16 14 25a14 14 0 1 1-28 0c0-9 6-15 14-25z' fill='%23e2a25e'/%3E%3Cpath d='M32 26c3 5 5 8 5 12a5 5 0 0 1-10 0c0-4 2-7 5-12z' fill='%2308110d'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="app">
+    <canvas id="world" aria-label="黑夜森林游戏画面"></canvas>
+    <div class="atmosphere" aria-hidden="true">
+      <div class="grain"></div>
+      <div class="vignette"></div>
+      <div class="moon-haze"></div>
+    </div>
+    <div id="damageFlash" aria-hidden="true"></div>
+    <div id="bleedEdge" aria-hidden="true"></div>
+    <div id="dangerPulse" aria-hidden="true"></div>
+
+    <svg class="svg-sprite" aria-hidden="true">
+      <defs>
+        <symbol id="i-compass" viewBox="0 0 24 24">
+          <circle cx="12" cy="12" r="8.6" fill="none" stroke="currentColor" stroke-width="1.4"/>
+          <path d="M14.8 9.2l-1.7 4.1-4.1 1.7 1.7-4.1 4.1-1.7z" fill="currentColor"/>
+          <path d="M12 1.8v2.1M12 20.1v2.1" stroke="currentColor" stroke-width="1.2"/>
+        </symbol>
+        <symbol id="i-heart" viewBox="0 0 24 24">
+          <path d="M12 20s-7.5-4.6-7.5-10A4.3 4.3 0 0 1 12 7a4.3 4.3 0 0 1 7.5 3c0 5.4-7.5 10-7.5 10z" fill="currentColor"/>
+        </symbol>
+        <symbol id="i-drop" viewBox="0 0 24 24">
+          <path d="M12 2.8s5.6 6.2 5.6 10.2A5.6 5.6 0 0 1 12 18.6a5.6 5.6 0 0 1-5.6-5.6C6.4 9 12 2.8 12 2.8z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          <path d="M9.4 13.6a2.7 2.7 0 0 0 2.6 2.3" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+        </symbol>
+        <symbol id="i-bolt" viewBox="0 0 24 24">
+          <path d="M13.3 2.5L5.7 13h5.1l-.9 8.5L18.3 11h-5.2l.2-8.5z" fill="currentColor"/>
+        </symbol>
+        <symbol id="i-flashlight" viewBox="0 0 24 24">
+          <path d="M7.1 4.4h9.8v4.2L15 11.3v7.9a1.4 1.4 0 0 1-1.4 1.4h-3.2a1.4 1.4 0 0 1-1.4-1.4v-7.9L7.1 8.6V4.4z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          <path d="M8.7 8.6h6.6M9.6 12.1h4.8M9.6 15.2h4.8" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+          <path d="M10.4 2.7h3.2" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+        </symbol>
+        <symbol id="i-medkit" viewBox="0 0 24 24">
+          <rect x="3.5" y="6.2" width="17" height="13" rx="2" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          <path d="M8.8 6.2V4.7A1.5 1.5 0 0 1 10.3 3.2h3.4a1.5 1.5 0 0 1 1.5 1.5v1.5" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          <path d="M12 9.5v6.2M8.9 12.6h6.2" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
+        </symbol>
+        <symbol id="i-rope" viewBox="0 0 24 24">
+          <path d="M5.1 18.9c-2.4-2.4 1.3-4.7 3.1-6.6 2-2.2 1.2-4.4-.5-5.9-1.8-1.6-1.5-4.2.8-4.7 2.7-.6 4.6 2.3 3 4.5-1.2 1.7-3.8 2.4-4.7 4.4-.8 1.8 1.1 3.2 2.7 3.6 2.4.6 4.7-1.4 6.7-.2 2.6 1.5 2.1 4.8.1 6-.9.6-2.2.7-3.3.4" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          <path d="M17.7 16.2c1.5-.5 2.6.7 2.2 2.1-.3 1.1-1.8 1.6-2.5.6" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+        </symbol>
+        <symbol id="i-knife" viewBox="0 0 24 24">
+          <path d="M20.4 3.5c-6.6.5-9.9 4.2-11.6 8.1l3.3 3.2c4.3-1.7 8-5.1 8.3-11.3z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+          <path d="M8.1 12.7l2.9 2.8" stroke="currentColor" stroke-width="1.2"/>
+          <path d="M8.4 16.2l-3.7 3.6M6.9 14.7l3.4 3.2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          <path d="M4.1 20.1l-1 1" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+        </symbol>
+        <symbol id="i-pause" viewBox="0 0 24 24">
+          <path d="M8 5.5v13M16 5.5v13" stroke="currentColor" stroke-width="2.3" stroke-linecap="round"/>
+        </symbol>
+        <symbol id="i-play" viewBox="0 0 24 24">
+          <path d="M8 4.7l11 7.3-11 7.3V4.7z" fill="currentColor"/>
+        </symbol>
+        <symbol id="i-sound" viewBox="0 0 24 24">
+          <path d="M4 9.2h3.2L12 5.3v13.4l-4.8-3.9H4V9.2z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+          <path d="M15.2 8.4a5 5 0 0 1 0 7.2M17.8 5.9a8.6 8.6 0 0 1 0 12.2" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+        </symbol>
+        <symbol id="i-mute" viewBox="0 0 24 24">
+          <path d="M4 9.2h3.2L12 5.3v13.4l-4.8-3.9H4V9.2z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+          <path d="M15.5 9.5l5 5M20.5 9.5l-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+        </symbol>
+        <symbol id="i-arrow" viewBox="0 0 24 24">
+          <path d="M12 3.5l7.2 8.2h-4.4v8.8H9.2v-8.8H4.8L12 3.5z" fill="currentColor"/>
+        </symbol>
+        <symbol id="i-foot" viewBox="0 0 24 24">
+          <path d="M9.6 12.8c-1.9-.2-3.1 1.6-2.7 3.9.4 2.4 2 4.5 4.2 4.3 2.4-.2 3.5-2.3 3-4.8-.4-2.2-2-3.3-4.5-3.4z" fill="currentColor"/>
+          <circle cx="10.2" cy="7.1" r="1.4" fill="currentColor"/>
+          <circle cx="13" cy="5.5" r="1.2" fill="currentColor"/>
+          <circle cx="15.3" cy="7.2" r="1" fill="currentColor"/>
+          <circle cx="15.6" cy="9.8" r=".9" fill="currentColor"/>
+        </symbol>
+        <symbol id="i-eye" viewBox="0 0 24 24">
+          <path d="M2.8 12s3.4-5.6 9.2-5.6 9.2 5.6 9.2 5.6-3.4 5.6-9.2 5.6S2.8 12 2.8 12z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          <circle cx="12" cy="12" r="2.5" fill="currentColor"/>
+        </symbol>
+        <symbol id="i-leaf" viewBox="0 0 24 24">
+          <path d="M4.2 19.8C2.6 12.6 7.9 3.9 20.6 3.3c.6 10.3-5.5 17.4-15 15.2" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+          <path d="M4.2 19.8C7.3 14 11.4 10.1 17.3 7" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+        </symbol>
+        <symbol id="i-skull" viewBox="0 0 24 24">
+          <path d="M5.5 11.4a6.5 6.5 0 1 1 13 0c0 2.2-1 3.4-2.4 4.5v2.4a1.8 1.8 0 0 1-1.8 1.8h-4.6a1.8 1.8 0 0 1-1.8-1.8v-2.4c-1.4-1.1-2.4-2.3-2.4-4.5z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          <circle cx="9.4" cy="11" r="1.35" fill="currentColor"/>
+          <circle cx="14.6" cy="11" r="1.35" fill="currentColor"/>
+          <path d="M10.3 16.3h3.4M10 18.4h4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+        </symbol>
+        <symbol id="i-torch" viewBox="0 0 24 24">
+          <path d="M12 2.8c1.8 2.7 4.2 5.4 4.2 8.7a4.2 4.2 0 1 1-8.4 0c0-3.3 2.4-6 4.2-8.7z" fill="currentColor"/>
+          <path d="M9.3 20.8h5.4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+        </symbol>
+        <symbol id="i-chevron" viewBox="0 0 24 24">
+          <path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+        </symbol>
+      </defs>
+    </svg>
+
+    <div id="hud" class="hud is-hidden">
+      <header class="hud-top">
+        <div class="brand">
+          <span class="brand-mark"><svg><use href="#i-leaf"/></svg></span>
+          <span class="brand-copy"><b>NIGHTWOOD</b><small>黑林夜行</small></span>
+        </div>
+
+        <section class="objective" aria-label="当前目标">
+          <div class="objective-main">
+            <span class="objective-icon"><svg><use href="#i-compass"/></svg></span>
+            <div class="objective-copy">
+              <span class="eyebrow">当前目标 · 向北</span>
+              <strong>穿过黑森林，抵达北侧林道</strong>
+            </div>
+            <div class="objective-distance"><b id="distance">1,250</b><span>m</span></div>
+          </div>
+          <div class="progress-track">
+            <span class="progress-fill" id="progressFill"></span>
+            <span class="progress-glow" id="progressGlow"></span>
+            <span class="progress-node progress-node-a"></span>
+            <span class="progress-node progress-node-b"></span>
+            <span class="progress-node progress-node-c"></span>
+          </div>
+          <span class="compass-arrow" id="compassArrow" aria-hidden="true"><svg><use href="#i-arrow"/></svg></span>
+        </section>
+
+        <div class="top-actions">
+          <button id="soundBtn" class="icon-btn" type="button" aria-label="关闭声音" title="声音">
+            <svg class="sound-on"><use href="#i-sound"/></svg>
+            <svg class="sound-off"><use href="#i-mute"/></svg>
+          </button>
+          <button id="pauseBtn" class="icon-btn" type="button" aria-label="暂停游戏" title="暂停 (Esc)">
+            <svg><use href="#i-pause"/></svg>
+          </button>
+        </div>
+      </header>
+
+      <aside class="status-panel" aria-label="生存状态">
+        <div class="status-head">
+          <span class="status-label"><svg><use href="#i-heart"/></svg> 生命</span>
+          <span class="hp-readout"><b id="hpValue">100</b><small>/100</small></span>
+        </div>
+        <div class="hp-track"><span id="hpFill" class="hp-fill"></span><i class="hp-shine"></i></div>
+        <div class="status-row">
+          <span class="bleed-label" id="bleedLabel"><svg><use href="#i-drop"/></svg> 无失血</span>
+          <span class="bleed-pips" id="bleedPips" aria-hidden="true"><i></i><i></i><i></i></span>
+        </div>
+        <div class="stamina-row">
+          <span><svg><use href="#i-bolt"/></svg> 体力</span>
+          <div class="stamina-track"><span id="staminaFill"></span></div>
+        </div>
+      </aside>
+
+      <div class="hotbar" role="group" aria-label="随身物品">
+        <button class="slot is-active" type="button" data-slot="light" aria-label="手电筒（F）">
+          <span class="slot-key">F</span>
+          <span class="slot-icon"><svg><use href="#i-flashlight"/></svg></span>
+          <span class="slot-name">手电</span>
+          <span class="slot-state" id="lightState">已开</span>
+        </button>
+        <button class="slot" type="button" data-slot="med" aria-label="急救药物（2）">
+          <span class="slot-key">2</span>
+          <span class="slot-icon"><svg><use href="#i-medkit"/></svg></span>
+          <span class="slot-name">急救药</span>
+          <span class="slot-count" id="medCount">2</span>
+        </button>
+        <button class="slot" type="button" data-slot="rope" aria-label="绳子（3）">
+          <span class="slot-key">3</span>
+          <span class="slot-icon"><svg><use href="#i-rope"/></svg></span>
+          <span class="slot-name">绳索</span>
+          <span class="slot-count" id="ropeCount">1</span>
+        </button>
+        <button class="slot slot-knife" type="button" data-slot="knife" aria-label="猎刀（鼠标左键或空格）">
+          <span class="slot-key">LMB</span>
+          <span class="slot-icon"><svg><use href="#i-knife"/></svg></span>
+          <span class="slot-name">猎刀</span>
+          <span class="slot-state">就绪</span>
+        </button>
+      </div>
+
+      <div id="prompt" class="prompt" role="status" aria-live="polite">
+        <span class="prompt-key">E</span>
+        <span class="prompt-copy"><b id="promptTitle">固定绳索</b><small id="promptSub">跨过前方断崖</small></span>
+      </div>
+
+      <div class="hints" aria-hidden="true">
+        <span><kbd>WASD</kbd> 移动</span>
+        <span><kbd>SHIFT</kbd> 奔跑</span>
+        <span><kbd>F</kbd> 手电</span>
+        <span><kbd>LMB</kbd> 挥刀</span>
+        <span><kbd>ESC</kbd> 暂停</span>
+      </div>
+
+      <div id="toasts" class="toasts" aria-live="polite" aria-atomic="false"></div>
+      <div id="sceneTitle" class="scene-title" aria-live="polite">
+        <span class="scene-eyebrow">第一章</span>
+        <b>入 林</b>
+        <small>天光在身后熄灭了</small>
+      </div>
+    </div>
+
+    <section id="menu" class="screen menu-screen">
+      <div class="menu-gradient"></div>
+      <div class="menu-content">
+        <div class="menu-lead">
+          <div class="menu-kicker"><span></span> SURVIVAL / SINGLE PLAYER <span></span></div>
+          <h1><span>黑林</span><span class="title-outline">夜行</span></h1>
+          <div class="title-en">NIGHTWOOD</div>
+          <p class="menu-story">林子比地图更大。天黑以后，这里只剩下一种方向——向北。<br>你带着一束手电、一把刀、一卷绳和两支急救药。别让血在黑暗里流干。</p>
+          <div class="menu-actions">
+            <button id="startBtn" class="btn btn-primary" type="button">
+              <span>踏入森林</span>
+              <svg><use href="#i-arrow"/></svg>
+            </button>
+            <button id="howBtn" class="btn btn-quiet" type="button">生存须知</button>
+          </div>
+          <div class="menu-meta">
+            <span><svg><use href="#i-foot"/></svg> 约 4–7 分钟</span>
+            <span><svg><use href="#i-eye"/></svg> 单人 · 横屏体验更佳</span>
+            <span class="menu-touch-tip"><svg><use href="#i-bolt"/></svg> 摇杆推到底奔跑</span>
+          </div>
+        </div>
+
+        <aside class="menu-side">
+          <div class="field-card">
+            <div class="field-head"><span>行 囊</span><small>YOU CARRY</small></div>
+            <ul class="kit-list">
+              <li><span class="kit-icon"><svg><use href="#i-flashlight"/></svg></span><div><b>手电筒</b><small>照见前路，也会招来注视</small></div><em>F</em></li>
+              <li><span class="kit-icon"><svg><use href="#i-medkit"/></svg></span><div><b>急救药物 ×2</b><small>止血、恢复生命，无法再生</small></div><em>2</em></li>
+              <li><span class="kit-icon"><svg><use href="#i-rope"/></svg></span><div><b>绳索 ×1</b><small>在断崖处固定一条生路</small></div><em>3</em></li>
+              <li><span class="kit-icon"><svg><use href="#i-knife"/></svg></span><div><b>猎刀</b><small>你唯一能还手的东西</small></div><em>LMB</em></li>
+            </ul>
+          </div>
+          <div class="rule-card">
+            <span class="rule-mark">!</span>
+            <p><b>失血比伤口更致命。</b><br>被咬伤后会持续失血；严重失血时，视野会变窄、脚步会变沉。及时用药，或者别被咬到。</p>
+          </div>
+          <div class="menu-footnote">耳机体验更佳 · 所有声音均实时合成</div>
+        </aside>
+      </div>
+      <div class="menu-controls">
+        <span><kbd>W A S D</kbd> 移动</span>
+        <span><kbd>鼠标</kbd> 照射 / 瞄准</span>
+        <span><kbd>左键</kbd> 挥刀</span>
+        <span><kbd>SHIFT</kbd> 奔跑</span>
+        <span><kbd>E</kbd> 交互</span>
+      </div>
+    </section>
+
+    <section id="howModal" class="screen modal-screen is-hidden" aria-modal="true" role="dialog" aria-labelledby="howTitle">
+      <div class="modal-card how-card">
+        <button class="modal-close" id="howClose" type="button" aria-label="关闭">×</button>
+        <span class="modal-kicker">FIELD MANUAL / 01</span>
+        <h2 id="howTitle">活着穿过黑森林</h2>
+        <div class="how-grid">
+          <article><span class="how-num">01</span><h3>看光，也看暗处</h3><p>手电照出的扇形区域最清晰。光圈外的树影里，可能只剩两只反光的眼睛。</p></article>
+          <article><span class="how-num">02</span><h3>光会暴露你</h3><p>捕食者更远就能发现开着手电、正在奔跑的人。想绕开它们，就关灯、慢走。</p></article>
+          <article><span class="how-num">03</span><h3>伤口必须处理</h3><p>每次被咬都会叠加失血。失血会持续扣除生命；按 <kbd>2</kbd> 使用急救药物止血。</p></article>
+          <article><span class="how-num">04</span><h3>不要恋战</h3><p>刀能逼退野兽，但你的体力有限。多数时候，跑开比杀死它更划算。</p></article>
+        </div>
+        <div class="how-tip"><b>路线提示</b> 沿林间小径向北。断崖处需要按 <kbd>E</kbd> 用绳索架桥。抵达北侧林道即穿越成功。</div>
+        <button id="howStart" class="btn btn-primary" type="button"><span>开始穿越</span><svg><use href="#i-arrow"/></svg></button>
+      </div>
+    </section>
+
+    <section id="pause" class="screen modal-screen is-hidden" aria-modal="true" role="dialog" aria-labelledby="pauseTitle">
+      <div class="modal-card pause-card">
+        <span class="modal-kicker">PAUSED / 林间暂歇</span>
+        <h2 id="pauseTitle">黑暗还在等你</h2>
+        <p class="modal-sub">深呼吸。野兽不会在你暂停时靠近。</p>
+        <div class="pause-actions">
+          <button id="resumeBtn" class="btn btn-primary" type="button"><span>继续前进</span><svg><use href="#i-play"/></svg></button>
+          <button id="pauseRestartBtn" class="btn btn-quiet" type="button">重新开始</button>
+          <button id="pauseMenuBtn" class="btn btn-quiet" type="button">返回标题</button>
+        </div>
+        <div class="pause-stats" id="pauseStats"></div>
+      </div>
+    </section>
+
+    <section id="death" class="screen end-screen is-hidden" aria-modal="true" role="dialog" aria-labelledby="deathTitle">
+      <div class="end-card end-death">
+        <span class="end-mark"><svg><use href="#i-skull"/></svg></span>
+        <span class="modal-kicker">THE FOREST KEPT YOU</span>
+        <h2 id="deathTitle">你倒在了黑暗里</h2>
+        <p id="deathReason" class="end-copy">血在落叶间洇开。森林重新安静下来。</p>
+        <div class="end-stats" id="deathStats"></div>
+        <div class="end-actions">
+          <button id="retryBtn" class="btn btn-primary" type="button"><span>再来一次</span><svg><use href="#i-arrow"/></svg></button>
+          <button id="deathMenuBtn" class="btn btn-quiet" type="button">返回标题</button>
+        </div>
+        <small class="end-hint">提示：及时止血，比杀死更多野兽更重要。</small>
+      </div>
+    </section>
+
+    <section id="victory" class="screen end-screen is-hidden" aria-modal="true" role="dialog" aria-labelledby="victoryTitle">
+      <div class="end-card end-victory">
+        <span class="end-mark"><svg><use href="#i-torch"/></svg></span>
+        <span class="modal-kicker">YOU MADE IT THROUGH</span>
+        <h2 id="victoryTitle">你走出了黑森林</h2>
+        <p id="victoryCopy" class="end-copy">林道尽头浮起灰蓝色的晨雾。你回头看了一眼——树影很深，但再没有东西跟上来。</p>
+        <div class="end-stats" id="victoryStats"></div>
+        <div class="end-actions">
+          <button id="againBtn" class="btn btn-primary" type="button"><span>再穿越一次</span><svg><use href="#i-arrow"/></svg></button>
+          <button id="victoryMenuBtn" class="btn btn-quiet" type="button">返回标题</button>
+        </div>
+        <small class="end-hint">结局达成 · 生还者</small>
+      </div>
+    </section>
+
+    <div id="touchUI" class="touch-ui" aria-hidden="true">
+      <div class="touch-stick" id="touchStick"><span class="stick-ring"></span><span class="stick-knob" id="stickKnob"></span></div>
+      <div class="touch-actions">
+        <button type="button" class="touch-btn touch-light" data-touch="light" aria-label="开关手电"><svg><use href="#i-flashlight"/></svg></button>
+        <button type="button" class="touch-btn touch-med" data-touch="med" aria-label="使用急救药物"><svg><use href="#i-medkit"/></svg></button>
+        <button type="button" class="touch-btn touch-interact" data-touch="interact" aria-label="交互"><span>E</span></button>
+        <button type="button" class="touch-btn touch-attack" data-touch="attack" aria-label="挥刀"><svg><use href="#i-knife"/></svg></button>
+      </div>
+    </div>
+
+    <div id="rotateHint" class="rotate-hint">
+      <svg><use href="#i-compass"/></svg>
+      <b>横屏进入森林</b>
+      <span>旋转设备可获得更完整的视野</span>
+    </div>
+  </div>
+
+  <script src="game.js"></script>
+</body>
+</html>
